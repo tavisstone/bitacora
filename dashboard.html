@@ -1,1 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS3 - Centro de Monitoreo y Seguimiento</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('wall.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
+        /* ENCABEZADO SUPERIOR */
+        .header {
+            background: rgba(5, 10, 15, 0.9);
+            border-bottom: 1px solid #1f3b5c;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(90deg, #bbbbbb 0%, #ffffff 50%, #bbbbbb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-status {
+            font-size: 12px;
+            color: #00ffff;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00ffcc;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00ffcc;
+        }
+
+        /* CONTENEDOR PRINCIPAL DE FORMULARIOS */
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(10, 18, 28, 0.85);
+            border: 1px solid #1f3b5c;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.15);
+        }
+
+        .card-title {
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #00ffff;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #1f3b5c;
+            padding-bottom: 8px;
+        }
+
+        /* FORMULARIOS Y CAMPOS */
+        .form-row {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+        }
+
+        .form-row label {
+            color: #7b93a8;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .form-row input, .form-row select {
+            width: 100%;
+            background: linear-gradient(to bottom, #192533, #0b1118);
+            border: 1px solid #1f3b5c;
+            border-radius: 4px;
+            padding: 8px 10px;
+            color: #00ffff;
+            font-size: 12px;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .form-row input:focus, .form-row select:focus {
+            border-color: #00ffff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0, 255, 255, 0.3);
+        }
+
+        /* SECCIÓN DE REMOLQUE FULL (OCULTA POR DEFECTO) */
+        .full-section {
+            display: none;
+            border-left: 2px solid #00ffff;
+            padding-left: 10px;
+            margin-top: 10px;
+            background: rgba(0, 191, 255, 0.03);
+        }
+
+        /* SECCIÓN INFERIOR DE REPORTES Y BITÁCORA */
+        .bottom-section {
+            max-width: 1400px;
+            margin: 0 auto 30px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .report-box {
+            display: grid;
+            grid-template-columns: 2fr 2fr 1.5fr auto;
+            gap: 15px;
+            align-items: center;
+            background: rgba(10, 18, 28, 0.85);
+            border: 1px solid #1f3b5c;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.15);
+        }
+
+        .btn-action {
+            background: linear-gradient(to bottom, #004b7a, #001a33);
+            border: 1px solid #005a9e;
+            border-radius: 20px;
+            padding: 10px 25px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 110, 255, 0.4);
+            text-transform: uppercase;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+        .btn-action:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
+
+        /* TABLA DE HISTORIAL DE REPORTES */
+        .history-table-container {
+            max-width: 1400px;
+            margin: 0 auto 40px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(10, 18, 28, 0.85);
+            border: 1px solid #1f3b5c;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 10px 15px;
+            text-align: left;
+            font-size: 11px;
+            border-bottom: 1px solid #1f3b5c;
+        }
+
+        th {
+            background: #111d2d;
+            color: #00ffff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        td { color: #d1f4ff; }
+        .anomaly-badge {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+        .normal-badge {
+            color: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ENCABEZADO -->
+    <div class="header">
+        <div class="header-title">SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.</div>
+        <div class="user-status">
+            <span class="status-dot"></span> CENTRO DE MONITOREO ACTIVO
+        </div>
+    </div>
+
+    <!-- CONTENEDOR DE FORMULARIOS -->
+    <div class="container">
+        
+        <!-- COLUMNA 1: GENERALES, CLIENTE Y RUTA -->
+        <div class="card">
+            <div class="card-title">1. Datos Generales y Ruta</div>
+            
+            <div class="form-row">
+                <label>No. Bitácora</label>
+                <input type="text" id="bitacora" placeholder="Ej. BIT-2026-001">
+            </div>
+
+            <div class="form-row">
+                <label>Cliente</label>
+                <select id="cliente">
+                    <option value="">Seleccione Cliente...</option>
+                    <option value="Dicsa">Dicsa</option>
+                    <option value="Fimasa">Fimasa</option>
+                    <option value="Reach">Reach</option>
+                    <option value="Akopla">Akopla</option>
+                    <option value="Dankel">Dankel</option>
+                    <option value="Dankel Erika Villalobos">Dankel Erika Villalobos</option>
+                    <option value="Bonatti">Bonatti</option>
+                    <option value="Cesco">Cesco</option>
+                    <option value="Cinvestav">Cinvestav</option>
+                    <option value="G&G">G&G</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Origen</label>
+                <input type="text" id="origen" placeholder="Ciudad / Planta de origen">
+            </div>
+
+            <div class="form-row">
+                <label>Destino</label>
+                <input type="text" id="destino" placeholder="Ciudad / Planta de destino">
+            </div>
+
+            <div class="card-title" style="margin-top: 25px;">Datos de Custodia</div>
+            
+            <div class="form-row">
+                <label>Custodio(s)</label>
+                <input type="text" id="custodia-nombre" placeholder="Nombres de elementos">
+            </div>
+            <div class="form-row">
+                <label>Portátiles</label>
+                <input type="text" id="custodia-portatiles" placeholder="Radios / Celulares asignados">
+            </div>
+            <div class="form-row">
+                <label>Placas Custodia</label>
+                <input type="text" id="custodia-placas" placeholder="Placas del vehículo">
+            </div>
+            <div class="form-row">
+                <label>Vehículo</label>
+                <input type="text" id="custodia-vehiculo" placeholder="Marca / Modelo patrulla">
+            </div>
+        </div>
+
+        <!-- COLUMNA 2: DATOS DE TRANSPORTE -->
+        <div class="card">
+            <div class="card-title">2. Datos de Transporte</div>
+
+            <div class="form-row">
+                <label>Operador</label>
+                <input type="text" id="operador" placeholder="Nombre completo">
+            </div>
+
+            <div class="form-row">
+                <label>Teléfono</label>
+                <input type="text" id="telefono" placeholder="Número de contacto">
+            </div>
+
+            <div class="form-row">
+                <label>Tipo de Unidad</label>
+                <select id="tipo-unidad" onchange="verificarUnidadFull()">
+                    <option value="">Seleccione unidad...</option>
+                    <option value="Particular">Particular</option>
+                    <option value="Camioneta 1.5">Camioneta 1.5</option>
+                    <option value="Camioneta 3.5">Camioneta 3.5</option>
+                    <option value="Camión">Camión</option>
+                    <option value="Mudanzero">Mudanzero</option>
+                    <option value="Rabón">Rabón</option>
+                    <option value="Torton">Torton</option>
+                    <option value="Tráiler">Tráiler</option>
+                    <option value="Full">Full</option>
+                    <option value="Low Boy">Low Boy</option>
+                    <option value="Góndola">Góndola</option>
+                    <option value="Auto tanque">Auto tanque</option>
+                    <option value="Jaula">Jaula</option>
+                    <option value="Tolva">Tolva</option>
+                    <option value="Eco">Eco</option>
+                    <option value="Placas">Placas</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Eco</label>
+                <input type="text" id="eco" placeholder="Número económico">
+            </div>
+
+            <div class="form-row">
+                <label>Placas</label>
+                <input type="text" id="placas" placeholder="Placas tractor">
+            </div>
+
+            <div class="form-row">
+                <label>Marca / Modelo</label>
+                <input type="text" id="marca-modelo" placeholder="Ej. Kenworth T680">
+            </div>
+
+            <div class="form-row">
+                <label>NIV</label>
+                <input type="text" id="niv" placeholder="Número de identificación vehicular">
+            </div>
+
+            <div class="form-row">
+                <label>Motor</label>
+                <input type="text" id="motor" placeholder="Serie o tipo de motor">
+            </div>
+
+            <div class="form-row">
+                <label>Eco Remolque</label>
+                <input type="text" id="eco-rem" placeholder="Económico remolque 1">
+            </div>
+
+            <div class="form-row">
+                <label>Placas Remolque</label>
+                <input type="text" id="placas-rem" placeholder="Placas remolque 1">
+            </div>
+
+            <!-- SECCIÓN DINÁMICA EXCLUSIVA PARA FULL -->
+            <div id="seccion-full" class="full-section">
+                <div class="form-row" style="margin-top: 10px;">
+                    <label style="color: #00ffff;">Eco Rem 2</label>
+                    <input type="text" id="eco-rem2" placeholder="Económico segundo remolque">
+                </div>
+                <div class="form-row" style="margin-bottom: 10px;">
+                    <label style="color: #00ffff;">Placas Rem 2</label>
+                    <input type="text" id="placas-rem2" placeholder="Placas segundo remolque">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- SECCIÓN DE REPORTE Y ANOMALÍAS -->
+    <div class="bottom-section">
+        <div class="report-box">
+            <div>
+                <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">REPORTE / UBICACIÓN MANUAL</label>
+                <input type="text" id="ubicacion-reporte" placeholder="Ej. Km 45 Autopista México-Querétaro..." style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; outline: none;">
+            </div>
+
+            <div>
+                <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">ANOMALÍA / SITUACIÓN</label>
+                <select id="anomalia-select" style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; outline: none;">
+                    <option value="Sin anomalía (Operación Normal)">Sin anomalía (Operación Normal)</option>
+                    <option value="Detención por alimentos">Detención por alimentos</option>
+                    <option value="Carga vehicular">Carga vehicular</option>
+                    <option value="Cierre de vialidad">Cierre de vialidad</option>
+                    <option value="Falla mecánica">Falla mecánica</option>
+                    <option value="Percance">Percance</option>
+                    <option value="Desvio de ruta">Desvío de ruta</option>
+                    <option value="Detencion no autorizada">Detención no autorizada</option>
+                    <option value="Perdida de comunicación">Pérdida de comunicación</option>
+                    <option value="Siniestro">Siniestro</option>
+                </select>
+            </div>
+
+            <div>
+                <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">ACCIÓN</label>
+                <div style="font-size: 12px; color: #00ffcc; padding-top: 5px;" id="reloj-actual">--/--/---- --:--:--</div>
+            </div>
+
+            <div style="text-align: right;">
+                <button class="btn-action" onclick="guardarSeguimiento()">Guardar Reporte</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLA DE HISTORIAL DE SEGUIMIENTO -->
+    <div class="history-table-container">
+        <div class="card-title">Historial de Bitácora y Reportes en Ruta</div>
+        <table id="tabla-bitacora">
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Bitácora</th>
+                    <th>Cliente</th>
+                    <th>Ubicación / Reporte</th>
+                    <th>Estatus / Anomalía</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los registros se llenarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SCRIPT DE CONTROL Y LÓGICA -->
+    <script>
+        // Reloj en tiempo real para el reporte
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('reloj-actual').textContent = now.toLocaleString('es-MX');
+        }, 1000);
+
+        // Lógica condicional para mostrar campos del segundo remolque si el tipo de unidad es Full
+        function verificarUnidadFull() {
+            const tipoUnidad = document.getElementById('tipo-unidad').value;
+            const seccionFull = document.getElementById('seccion-full');
+            
+            if (tipoUnidad === 'Full') {
+                seccionFull.style.display = 'block';
+            } else {
+                seccionFull.style.display = 'none';
+                document.getElementById('eco-rem2').value = '';
+                document.getElementById('placas-rem2').value = '';
+            }
+        }
+
+        // Función para guardar el reporte en la tabla de historial
+        function guardarSeguimiento() {
+            const bitacora = document.getElementById('bitacora').value.trim();
+            const cliente = document.getElementById('cliente').value;
+            const ubicacion = document.getElementById('ubicacion-reporte').value.trim();
+            const anomalia = document.getElementById('anomalia-select').value;
+            const fechaHora = document.getElementById('reloj-actual').textContent;
+
+            if (!bitacora) {
+                alert('Por favor, ingrese el Número de Bitácora.');
+                document.getElementById('bitacora').focus();
+                return;
+            }
+
+            if (!ubicacion) {
+                alert('Por favor, escriba la ubicación o el reporte actual.');
+                document.getElementById('ubicacion-reporte').focus();
+                return;
+            }
+
+            const tabla = document.getElementById('tabla-bitacora').getElementsByTagName('tbody')[0];
+            const nuevaFila = tabla.insertRow(0); // Inserta el reporte más reciente arriba
+
+            const celdaFecha = nuevaFila.insertCell(0);
+            const celdaBitacora = nuevaFila.insertCell(1);
+            const celdaCliente = nuevaFila.insertCell(2);
+            const celdaUbicacion = nuevaFila.insertCell(3);
+            const celdaAnomalia = nuevaFila.insertCell(4);
+
+            celdaFecha.textContent = fechaHora;
+            celdaBitacora.textContent = bitacora;
+            celdaCliente.textContent = cliente || 'N/D';
+            celdaUbicacion.textContent = ubicacion;
+            
+            if (anomalia.includes('Normal') || anomalia.includes('Sin anomalía')) {
+                celdaAnomalia.className = 'normal-badge';
+            } else {
+                celdaAnomalia.className = 'anomaly-badge';
+            }
+            celdaAnomalia.textContent = anomalia;
+
+            // Limpiar caja de reporte y ubicación para el siguiente evento
+            document.getElementById('ubicacion-reporte').value = '';
+            document.getElementById('anomalia-select').selectedIndex = 0;
+            
+            alert('¡Reporte guardado con éxito en la bitácora de ruta!');
+        }
+    </script>
+</body>
+</html>
