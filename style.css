@@ -1,1 +1,53 @@
+/* Configuración global de fuentes y colores */
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
 
+/* Diseño del contenedor de Login */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-box {
+    background: #111;
+    padding: 40px;
+    border: 1px solid #0056b3;
+    border-radius: 10px;
+    width: 350px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 86, 179, 0.3);
+}
+
+.form-group { margin-bottom: 20px; text-align: left; }
+.form-group label { display: block; margin-bottom: 5px; color: #aaa; font-size: 12px; }
+.form-group input { 
+    width: 100%; padding: 10px; border: none; border-bottom: 2px solid #333; 
+    background: #222; color: #fff; 
+}
+
+#login-btn {
+    width: 100%; padding: 12px; background: #0056b3; color: white; border: none;
+    cursor: pointer; font-weight: bold; margin-top: 10px;
+}
+
+#login-btn:hover { background: #007bff; }
+
+/* Estilos de la tabla de seguimiento */
+.dashboard-container { padding: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #1a1a1a; }
+th, td { padding: 15px; border: 1px solid #333; text-align: left; }
+th { background-color: #0056b3; }
+
+/* Botones de acción */
+.controls { display: flex; gap: 10px; margin-bottom: 20px; }
+.btn-file { background: #444; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+.btn-success { background: #28a745; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+
+input[type="file"] { display: none; }
