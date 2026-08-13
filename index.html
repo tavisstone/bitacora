@@ -3,150 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GS3 - Centro de Monitoreo y Sistemas Privados</title>
+    <title>GS3 - Login</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('wall.png');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('wall.png');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100vh;
             display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        /* ENCABEZADO PRINCIPAL */
+        .header-text {
+            text-align: center;
+            padding-top: 20px;
+            font-size: clamp(12px, 1.5vw, 16px);
+            font-weight: 400;
+            letter-spacing: 3px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            
+            background: linear-gradient(90deg, #bbbbbb 0%, #ffffff 50%, #bbbbbb 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* CONTENEDOR CENTRAL */
+        .main-content {
+            display: flex;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
+            gap: 80px;
+            flex-grow: 1;
         }
 
-        .login-container {
-            background: rgba(10, 18, 28, 0.85);
-            border: 1px solid #1f3b5c;
-            border-radius: 12px;
-            padding: 40px;
-            width: 420px;
-            box-shadow: 0 0 30px rgba(0, 100, 255, 0.25);
-            text-align: center;
-            backdrop-filter: blur(5px);
-        }
-
-        .login-logo {
-            font-size: 11px;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: #7b93a8;
-            margin-bottom: 8px;
-        }
-
-        .login-title {
-            font-size: 18px;
-            letter-spacing: 1.5px;
-            color: #00ffff;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            color: #7b93a8;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            width: 100%;
-            background: #192533;
-            border: 1px solid #1f3b5c;
-            padding: 12px 15px;
-            color: #00ffff;
-            border-radius: 6px;
-            outline: none;
-            font-size: 13px;
-            transition: border-color 0.2s;
-        }
-
-        .form-group input:focus {
-            border-color: #00ffff;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
-        }
-
-        .btn-login {
-            background: linear-gradient(to bottom, #004b7a, #001a33);
-            border: 1px solid #005a9e;
-            border-radius: 6px;
-            padding: 12px;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            width: 100%;
-            text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(0, 110, 255, 0.4);
-            transition: background 0.3s, transform 0.1s;
-            margin-top: 10px;
-        }
-
-        .btn-login:hover {
-            background: linear-gradient(to bottom, #005a9e, #002240);
-        }
-
-        .btn-login:active {
-            transform: scale(0.98);
-        }
-
-        .footer-status {
-            margin-top: 25px;
-            font-size: 10px;
-            color: #00ffcc;
-            letter-spacing: 1px;
+        /* LOGO CON ONDA DE ENERGÍA */
+        .logo-container {
+            width: 450px;
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 6px;
         }
 
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background-color: #00ffcc;
+        .logo-container img {
+            width: 100%;
+            display: block;
+            -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
+            mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            width: 380px;
+            height: 380px;
             border-radius: 50%;
-            box-shadow: 0 0 6px #00ffcc;
+            border: 2px dashed rgba(0, 191, 255, 0.4);
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.3), inset 0 0 25px rgba(0, 150, 255, 0.3);
+            animation: pulse-ring 4s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.3; }
+            50% { transform: scale(1.05); opacity: 0.8; box-shadow: 0 0 40px rgba(0, 220, 255, 0.7), inset 0 0 40px rgba(0, 220, 255, 0.7); }
+            100% { transform: scale(0.95); opacity: 0.3; }
+        }
+
+        /* PANEL DE LOGIN */
+        .login-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 380px;
+            position: relative;
+        }
+
+        .silueta-container {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #1f3b5c;
+            background: radial-gradient(circle, #0f1b29, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+            overflow: hidden;
+            margin-left: calc(100% - 260px + (260px - 70px) / 2); 
+        }
+
+        .silueta-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            color: #7b93a8;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-align: left;
+            width: 90px;
+        }
+
+        .input-group input {
+            width: 260px;
+            background: linear-gradient(to bottom, #192533, #0b1118);
+            border: 1px solid #1f3b5c;
+            border-radius: 4px;
+            padding: 12px;
+            color: #00ffff;
+            outline: none;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 8px rgba(0, 150, 255, 0.1);
+        }
+
+        .input-group input:focus {
+            border-color: #00ffff;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 12px rgba(0, 255, 255, 0.4);
+        }
+
+        .login-btn {
+            background: linear-gradient(to bottom, #004b7a, #001a33);
+            border: 1px solid #005a9e;
+            border-radius: 25px;
+            padding: 10px 45px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 110, 255, 0.5);
+            margin-top: 15px;
+            width: 260px;
+            align-self: flex-end;
+            transition: background 0.3s ease;
+        }
+        .login-btn:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
+        .login-btn span { color: #00ffff; font-size: 18px; font-weight: bold; }
+
+        /* ESTILO PARA MENSAJE DE ERROR */
+        #error-msg {
+            color: #ff4d4d;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-align: right;
+            width: 260px;
+            align-self: flex-end;
+            margin-top: 8px;
+            min-height: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .bottom-spacer {
+            height: 30px;
         }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="login-logo">Servicio Global de Seguridad GS3</div>
-        <div class="login-title">Centro de Monitoreo</div>
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="header-text">
+        SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.
+    </div>
 
-        <form action="dashboard.html" method="GET">
-            <div class="form-group">
-                <label for="usuario">Usuario / Operador</label>
-                <input type="text" id="usuario" name="usuario" placeholder="Ingrese su usuario" required autocomplete="off">
+    <!-- CONTENEDOR CENTRAL -->
+    <div class="main-content">
+        <!-- LOGO CON ONDA DE ENERGÍA -->
+        <div class="logo-container">
+            <img src="logo-gs3.png" alt="Logo GS3">
+        </div>
+
+        <!-- LOGIN -->
+        <div class="login-panel">
+            <div class="silueta-container">
+                <img src="silueta.png" alt="Silueta Usuario">
             </div>
-
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            
+            <div class="input-group">
+                <label>USERNAME</label>
+                <input type="text" id="username" placeholder="">
             </div>
-
-            <button type="submit" class="btn-login">Acceder al Sistema</button>
-        </form>
-
-        <div class="footer-status">
-            <span class="status-dot"></span> SISTEMA DE ACCESO SEGURO
+            
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password" id="password" placeholder="">
+            </div>
+            
+            <button class="login-btn" id="login-btn">
+                <span>✓</span> LOGIN
+            </button>
+            <div id="error-msg"></div>
         </div>
     </div>
 
+    <!-- ESPACIADOR INFERIOR -->
+    <div class="bottom-spacer"></div>
+
+    <!-- SCRIPT DE VALIDACIÓN DE INICIO DE SESIÓN -->
+    <script>
+        const loginBtn = document.getElementById('login-btn');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const errorMsg = document.getElementById('error-msg');
+
+        function realizarLogin() {
+            const user = usernameInput.value.trim();
+            const pass = passwordInput.value.trim();
+
+            // Credenciales de prueba (puedes cambiarlas o enlazarlas a tu backend después)
+            const usuarioValido = "admin";
+            const passwordValido = "gs32026";
+
+            if (user === "" || pass === "") {
+                mostrarError("INGRESE USUARIO Y CONTRASEÑA");
+                return;
+            }
+
+            if (user === usuarioValido && pass === passwordValido) {
+                errorMsg.style.opacity = "0";
+                loginBtn.innerHTML = "<span>⟳</span> ACCEDIENDO...";
+                loginBtn.style.pointerEvents = "none";
+
+                // Simula una breve carga de seguridad y redirige al dashboard
+                setTimeout(() => {
+                    alert("¡Acceso concedido con éxito!");
+                    window.location.href = "dashboard.html"; 
+                }, 1000);
+            } else {
+                mostrarError("CREDENCIALES INCORRECTAS");
+                passwordInput.value = "";
+                passwordInput.focus();
+            }
+        }
+
+        function mostrarError(mensaje) {
+            errorMsg.textContent = mensaje;
+            errorMsg.style.opacity = "1";
+            setTimeout(() => {
+                errorMsg.style.opacity = "0";
+            }, 3000);
+        }
+
+        // Evento al hacer clic en el botón
+        loginBtn.addEventListener('click', realizarLogin);
+
+        // Evento al presionar la tecla Enter dentro de los campos
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                realizarLogin();
+            }
+        });
+        
+        usernameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                passwordInput.focus();
+            }
+        });
+    </script>
 </body>
 </html>
