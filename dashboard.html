@@ -192,7 +192,7 @@
         .ctx-btn:hover { background: #192533; color: #00ffff; border-color: #00ffff; }
         .ctx-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #1f3b5c; color: #7b93a8; }
 
-        /* CONTENEDOR DE FORMULARIOS (AGREGAR SERVICIO) */
+        /* CONTENEDORES DE FORMULARIOS (AGREGAR SERVICIO) */
         .container-forms {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -388,7 +388,7 @@
     <div class="header">
         <div class="header-title">SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.</div>
         <div class="user-status">
-            <span class="status-dot"></span> CENTRO DE MONITOREO ACTIVO
+            <span class="status-dot"></span> CENTRO DE MONITOREO ACTIVO | USUARIO: <span id="label-sesion-usuario" style="color: #ffffff; font-weight: bold;">Monitorista</span>
         </div>
     </div>
 
@@ -403,9 +403,6 @@
         <div class="card-title">Bitácoras Activas y Registradas en Sistema</div>
         <div id="panel-bitacoras-grid" class="panel-grid">
             <!-- Las tarjetas de bitácoras se cargarán aquí dinámicamente -->
-            <div style="color: #7b93a8; font-size: 12px; grid-column: 1 / -1; text-align: center; padding: 30px;">
-                No hay servicios registrados en este momento. Utilice "+ Agregar Servicio" para comenzar.
-            </div>
         </div>
     </div>
 
@@ -414,7 +411,7 @@
         <div class="container-forms">
             
             <!-- COLUMNA 1: GENERALES, CLIENTE Y RUTA + CUSTODIA -->
-            <div class="card">
+            <div class="card" id="card-col1">
                 <div class="card-title">
                     1. Datos Generales y Ruta
                     <button class="btn-edit" onclick="habilitarFormulario('col1')" title="Modificar datos">✏️</button>
@@ -473,7 +470,7 @@
             </div>
 
             <!-- COLUMNA 2: DATOS DE TRANSPORTE (CON SOPORTE MULTI-TRANSPORTE) -->
-            <div class="card">
+            <div class="card" id="card-col2">
                 <div class="card-title">
                     2. Datos de Transporte
                     <button class="btn-edit" onclick="habilitarFormulario('col2')" title="Modificar datos">✏️</button>
@@ -565,12 +562,8 @@
         <div class="bottom-section">
             <div class="report-box">
                 <div>
-                    <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">USUARIO ENTURNO</label>
-                    <select id="usuario-sistema" style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; outline: none;">
-                        <option value="Monitorista">Monitorista</option>
-                        <option value="Coordinador">Coordinador</option>
-                        <option value="Administrador">Administrador</option>
-                    </select>
+                    <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">USUARIO EN TURNO</label>
+                    <div id="usuario-sistema-fijo" style="background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; font-size: 12px; font-weight: bold;">Monitorista</div>
                 </div>
                 <div>
                     <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">REPORTE / UBICACIÓN MANUAL</label>
@@ -604,7 +597,7 @@
         </div>
     </div>
 
-    <!-- VISTA: MONITOREO ACTIVO / SEGUIMIENTO DETALLADO (OCULTO / DINÁMICO) -->
+    <!-- VISTA: MONITOREO ACTIVO / SEGUIMIENTO DETALLADO -->
     <div id="vista-monitoreo" class="view-section">
         <div class="card-title" id="titulo-monitoreo-activo">Monitoreo de Bitácora: [---]</div>
         
@@ -612,11 +605,7 @@
             <div class="report-box">
                 <div>
                     <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">USUARIO</label>
-                    <select id="mon-usuario" style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; outline: none;">
-                        <option value="Monitorista">Monitorista</option>
-                        <option value="Coordinador">Coordinador</option>
-                        <option value="Administrador">Administrador</option>
-                    </select>
+                    <div id="mon-usuario-fijo" style="background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; font-size: 12px; font-weight: bold;">Monitorista</div>
                 </div>
                 <div>
                     <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">UBICACIÓN / REPORTE</label>
@@ -678,6 +667,19 @@
         let serviciosDB = [];
         let bitacoraActivaActual = null;
         let contadorTransportes = 1;
+        
+        // Simulación de sesión de usuario en curso (puedes cambiarlo a "Coordinador" o "Administrador" según se requiera)
+        let usuarioSesionActual = "Monitorista";
+
+        // Inicializar datos de sesión en pantalla
+        document.addEventListener("DOMContentLoaded", () => {
+            const lbl = document.getElementById('label-sesion-usuario');
+            if (lbl) lbl.textContent = usuarioSesionActual;
+            const usrFijo1 = document.getElementById('usuario-sistema-fijo');
+            if (usrFijo1) usrFijo1.textContent = usuarioSesionActual;
+            const usrFijo2 = document.getElementById('mon-usuario-fijo');
+            if (usrFijo2) usrFijo2.textContent = usuarioSesionActual;
+        });
 
         // Reloj en tiempo real
         setInterval(() => {
@@ -701,9 +703,104 @@
             } else if (vista === 'agregar') {
                 document.getElementById('vista-agregar').classList.add('active');
                 document.querySelectorAll('.nav-btn')[1].classList.add('active');
+                // Limpiar y preparar formulario para un nuevo registro limpio
+                limpiarYPrepararFormularioNuevo();
             } else if (vista === 'monitoreo') {
                 document.getElementById('vista-monitoreo').classList.add('active');
             }
+        }
+
+        // Limpia el formulario de agregar servicio para que esté totalmente habilitado y vacío para un nuevo registro
+        function limpiarYPrepararFormularioNuevo() {
+            // Limpiar inputs generales y de custodia
+            document.querySelectorAll('#vista-agregar input:not([type="button"]):not([type="submit"])').forEach(input => {
+                input.value = '';
+                input.disabled = false;
+            });
+
+            // Restablecer selects
+            document.querySelectorAll('#vista-agregar select').forEach(select => {
+                select.selectedIndex = 0;
+                select.disabled = false;
+            });
+
+            // Restablecer contenedor de transportes a 1 solo transporte limpio
+            const contenedor = document.getElementById('contenedor-transportes');
+            contadorTransportes = 1;
+            contenedor.innerHTML = `
+                <div class="transport-group-container" data-index="1">
+                    <div style="font-size: 10px; color: #00ffff; margin-bottom: 10px; font-weight: bold; letter-spacing: 1px;">TRANSPORTE 1</div>
+                    <div class="form-row">
+                        <label>Operador</label>
+                        <input type="text" class="t-operador" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-row">
+                        <label>Teléfono</label>
+                        <input type="text" class="t-telefono" placeholder="Número de contacto">
+                    </div>
+                    <div class="form-row">
+                        <label>Tipo de Unidad</label>
+                        <select class="t-tipo-unidad" onchange="verificarUnidadFull(this)">
+                            <option value="">Seleccione unidad...</option>
+                            <option value="Particular">Particular</option>
+                            <option value="Camioneta 1.5">Camioneta 1.5</option>
+                            <option value="Camioneta 3.5">Camioneta 3.5</option>
+                            <option value="Camión">Camión</option>
+                            <option value="Mudanzero">Mudanzero</option>
+                            <option value="Rabón">Rabón</option>
+                            <option value="Torton">Torton</option>
+                            <option value="Tráiler">Tráiler</option>
+                            <option value="Full">Full</option>
+                            <option value="Low Boy">Low Boy</option>
+                            <option value="Góndola">Góndola</option>
+                            <option value="Auto tanque">Auto tanque</option>
+                            <option value="Jaula">Jaula</option>
+                            <option value="Tolva">Tolva</option>
+                            <option value="Eco">Eco</option>
+                            <option value="Placas">Placas</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>Eco</label>
+                        <input type="text" class="t-eco" placeholder="Número económico">
+                    </div>
+                    <div class="form-row">
+                        <label>Placas</label>
+                        <input type="text" class="t-placas" placeholder="Placas tractor">
+                    </div>
+                    <div class="form-row">
+                        <label>Marca / Modelo</label>
+                        <input type="text" class="t-marca" placeholder="Ej. Kenworth T680">
+                    </div>
+                    <div class="form-row">
+                        <label>NIV</label>
+                        <input type="text" class="t-niv" placeholder="Número de identificación vehicular">
+                    </div>
+                    <div class="form-row">
+                        <label>Motor</label>
+                        <input type="text" class="t-motor" placeholder="Serie o tipo de motor">
+                    </div>
+                    <div class="form-row">
+                        <label>Eco Remolque</label>
+                        <input type="text" class="t-eco-rem" placeholder="Económico remolque 1">
+                    </div>
+                    <div class="form-row">
+                        <label>Placas Remolque</label>
+                        <input type="text" class="t-placas-rem" placeholder="Placas remolque 1">
+                    </div>
+                    <div class="seccion-full full-section">
+                        <div class="form-row" style="margin-top: 10px;">
+                            <label style="color: #00ffff;">Eco Rem 2</label>
+                            <input type="text" class="t-eco-rem2" placeholder="Económico segundo remolque">
+                        </div>
+                        <div class="form-row" style="margin-bottom: 10px;">
+                            <label style="color: #00ffff;">Placas Rem 2</label>
+                            <input type="text" class="t-placas-rem2" placeholder="Placas segundo remolque">
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('ubicacion-reporte').value = '';
         }
 
         // Agregar dinámicamente más transportes en el mismo servicio
@@ -783,7 +880,7 @@
             const cliente = document.getElementById('cliente').value;
             const origen = document.getElementById('origen').value.trim();
             const destino = document.getElementById('destino').value.trim();
-            const usuario = document.getElementById('usuario-sistema').value;
+            const usuario = usuarioSesionActual;
             const ubicacion = document.getElementById('ubicacion-reporte').value.trim();
             const anomalia = document.getElementById('anomalia-select').value;
             const fechaHora = document.getElementById('reloj-actual').textContent;
@@ -816,7 +913,7 @@
                 cliente: cliente || 'N/D',
                 origen: origen || 'N/D',
                 destino: destino || 'N/D',
-                estatusServicio: 'Inactivo', // Inactivo, Activo, Destino, Siniestro, Finalizado
+                estatusServicio: 'Inactivo',
                 anomaliaActual: anomalia,
                 historial: [
                     { fechaHora, usuario, bitacora, cliente: cliente || 'N/D', ubicacion: ubicacion || 'Creación y registro de servicio', anomalia }
@@ -844,7 +941,6 @@
             }
 
             serviciosDB.forEach(serv => {
-                // Determinar color de tarjeta y badge según estatus / anomalías
                 let claseColor = 'status-gris';
                 let claseBadge = 'badge-gris';
                 let textoBadge = 'Inactivo';
@@ -866,7 +962,6 @@
                 const card = document.createElement('div');
                 card.className = `bitacora-card ${claseColor}`;
                 card.onclick = (e) => {
-                    // Evitar que el clic en botones dispare la expansión múltiple si se desea
                     toggleMenuBitacora(card);
                 };
 
@@ -893,7 +988,6 @@
         // Mostrar u ocultar menú contextual al hacer clic en la bitácora
         function toggleMenuBitacora(cardElement) {
             const menu = cardElement.querySelector('.context-menu');
-            // Cerrar otros menús abiertos
             document.querySelectorAll('.context-menu').forEach(m => {
                 if (m !== menu) m.style.display = 'none';
             });
@@ -920,7 +1014,7 @@
         }
 
         function registrarSeguimientoMonitoreo() {
-            const usuario = document.getElementById('mon-usuario').value;
+            const usuario = usuarioSesionActual;
             const ubicacion = document.getElementById('mon-ubicacion').value.trim();
             const anomalia = document.getElementById('mon-anomalia').value;
             const fechaHora = document.getElementById('mon-reloj').textContent;
