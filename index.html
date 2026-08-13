@@ -3,94 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GS3 - Bitácora de Custodias</title>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <title>GS3 - Login</title>
+    <style>
+        /* 1. RESET Y FONDO ABSOLUTO */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        /* 2. LEYENDA SUPERIOR CENTRADA */
+        .header-text {
+            text-align: center;
+            padding-top: 15px;
+            font-size: 15px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        /* 3. CONTENEDOR CENTRAL (Logo Izquierda / Login Derecha) */
+        .main-content {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 70px; /* Separación entre el logo y los cuadros */
+            flex-grow: 1;
+        }
+
+        /* --- LADO IZQUIERDO: LOGO CON DIFUMINADO --- */
+        .logo-container {
+            width: 450px;
+            /* Esta línea es la que borra el cuadro cuadrado de tu imagen y lo funde con el negro */
+            -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
+            mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
+        }
+        .logo-container img {
+            width: 100%;
+            display: block;
+        }
+
+        /* --- LADO DERECHO: LOGIN PANEL --- */
+        .login-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 420px;
+        }
+
+        /* Ícono de huella digital */
+        .fingerprint {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #1a2a3a;
+            background: radial-gradient(circle, #0f1b29, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.3);
+            font-size: 30px;
+        }
+
+        /* Cuadros de texto estilo metálico con etiquetas a la izquierda */
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            color: #7b93a8;
+            font-size: 13px;
+            letter-spacing: 1px;
+            margin-right: 20px;
+            text-align: right;
+        }
+
+        .input-group input {
+            width: 260px;
+            background: linear-gradient(to bottom, #192533, #0b1118);
+            border: 1px solid #1f3b5c;
+            border-radius: 4px;
+            padding: 12px;
+            color: #00ffff;
+            outline: none;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 8px rgba(0, 150, 255, 0.1);
+        }
+
+        /* Botón Ovalado de Login */
+        .login-btn {
+            background: linear-gradient(to bottom, #004b7a, #001a33);
+            border: 1px solid #005a9e;
+            border-radius: 25px; /* Esto lo hace óvalo/píldora */
+            padding: 10px 45px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 110, 255, 0.5);
+            margin-top: 15px;
+            margin-left: 100px; /* Para alinearlo con los cuadros */
+        }
+        .login-btn:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
+        .login-btn span { color: #00ffff; font-size: 18px; font-weight: bold; }
+
+        /* 4. FOOTER (Asociaciones y Redes Sociales en fila) */
+        .footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding-bottom: 15px;
+        }
+        .logos-asociaciones { display: flex; gap: 10px; }
+        .badge { background: #fff; color: #000; font-size: 10px; padding: 3px 6px; font-weight: bold; border-radius: 2px;}
+        
+        .redes { display: flex; gap: 12px; }
+        .redes span {
+            display: flex; justify-content: center; align-items: center;
+            width: 32px; height: 32px; border-radius: 50%; color: white; background: #333; cursor: pointer; font-size: 14px;
+        }
+        .fb { background: #3b5998 !important; }
+        .ig { background: #e1306c !important; }
+        .tw { background: #1da1f2 !important; }
+        .in { background: #0077b5 !important; }
+        .web { background: #555 !important; }
+    </style>
 </head>
 <body>
 
-    <!-- Pantalla de Login -->
-    <div id="login-section" class="login-page-container">
-        
-        <!-- Leyenda Superior en una sola línea -->
-        <header class="top-header">
-            SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.
-        </header>
-
-        <!-- Contenido Central (Logo y Formulario) -->
-        <div class="main-content">
-            <!-- Lado Izquierdo: Logo con difuminado -->
-            <div class="logo-box">
-                <img src="logo-gs3.png" alt="Logo GS3">
-            </div>
-
-            <!-- Lado Derecho: Panel de Login -->
-            <div class="login-panel">
-                <!-- Icono de Huella Digital -->
-                <div class="fingerprint-icon">
-                    <div class="inner-print"></div>
-                </div>
-
-                <div class="input-row">
-                    <span class="input-label">USERNAME</span>
-                    <div class="tech-input-container">
-                        <input type="text" id="username">
-                    </div>
-                </div>
-
-                <div class="input-row">
-                    <span class="input-label">PASSWORD</span>
-                    <div class="tech-input-container">
-                        <input type="password" id="password">
-                    </div>
-                </div>
-
-                <button id="login-btn" onclick="iniciarSesion()">
-                    <span class="check-icon">✓</span> LOGIN
-                </button>
-            </div>
-        </div>
-
-        <!-- Pie de página con asociaciones y redes -->
-        <footer class="bottom-footer">
-            <div class="associations">
-                <span class="assoc-badge">AMESP</span>
-                <span class="assoc-badge">ASIS</span>
-                <span class="assoc-badge">ALAS</span>
-            </div>
-            <div class="social-icons">
-                <div class="social-btn fb">f</div>
-                <div class="social-btn ig">📷</div>
-                <div class="social-btn tw">🐦</div>
-                <div class="social-btn in">in</div>
-                <div class="social-btn web">🌐</div>
-            </div>
-        </footer>
-
+    <!-- LEYENDA SUPERIOR -->
+    <div class="header-text">
+        SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.
     </div>
 
-    <!-- Panel de Bitácora (Oculto inicialmente) -->
-    <div id="dashboard-section" class="dashboard-container" style="display: none;">
-        <header class="dashboard-header">
-            <h2>Bitácora Electrónica de Seguimiento</h2>
-            <button onclick="cerrarSesion()" class="btn-danger">Cerrar Sesión</button>
-        </header>
-        <div class="controls">
-            <label class="btn-file">📁 Cargar Base de Datos (Excel)
-                <input type="file" id="excel-file" accept=".xlsx, .xls" onchange="cargarExcel(event)">
-            </label>
-            <button onclick="exportarExcel()" class="btn-success">💾 Descargar Respaldo</button>
+    <!-- CONTENEDOR CENTRAL -->
+    <div class="main-content">
+        <!-- LOGO -->
+        <div class="logo-container">
+            <!-- AQUÍ ESTÁ TU IMAGEN -->
+            <img src="logo-gs3.png" alt="Logo GS3">
         </div>
-        <div class="table-responsive">
-            <table id="viajes-table">
-                <thead>
-                    <tr><th>ID Viaje</th><th>Cliente</th><th>Origen</th><th>Destino</th><th>Estatus</th><th>Acción</th></tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+
+        <!-- LOGIN -->
+        <div class="login-panel">
+            <div class="fingerprint">🪪</div>
+            
+            <div class="input-group">
+                <label>USERNAME</label>
+                <input type="text">
+            </div>
+            
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password">
+            </div>
+            
+            <button class="login-btn">
+                <span>✓</span> LOGIN
+            </button>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <!-- PIE DE PÁGINA (Redes y logos) -->
+    <div class="footer">
+        <div class="logos-asociaciones">
+            <span class="badge">AMESP</span> 
+            <span class="badge">ASIS</span> 
+            <span class="badge">ALAS</span>
+        </div>
+        <div class="redes">
+            <span class="fb">f</span> 
+            <span class="ig">📷</span> 
+            <span class="tw">🐦</span> 
+            <span class="in">in</span> 
+            <span class="web">🌐</span>
+        </div>
+    </div>
+
 </body>
 </html>
