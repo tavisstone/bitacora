@@ -257,10 +257,10 @@
                 loginBtn.innerHTML = "<span>⟳</span> ACCEDIENDO...";
                 loginBtn.style.pointerEvents = "none";
 
-                // Simula una breve carga de seguridad y redirige al dashboard (puedes cambiar 'dashboard.html' por tu siguiente vista)
+                // Simula una breve carga de seguridad y redirige al dashboard
                 setTimeout(() => {
                     alert("¡Acceso concedido con éxito!");
-                    // window.location.href = "dashboard.html"; 
+                    window.location.href = "dashboard.html"; 
                 }, 1000);
             } else {
                 mostrarError("CREDENCIALES INCORRECTAS");
