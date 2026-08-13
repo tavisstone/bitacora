@@ -4,62 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GS3 - Bitácora de Custodias</title>
-    <!-- Librería para leer y escribir Excel desde la web -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Pantalla de Login -->
     <div id="login-section" class="login-container">
+        <div class="logo-box">
+            <img src="logo-gs3.png" alt="Logo GS3">
+        </div>
         <div class="login-box">
             <h2>SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.</h2>
             <div class="form-group">
-                <label for="username">USERNAME</label>
-                <input type="text" id="username" placeholder="Ingrese usuario">
-            </div>
-            <div class="form-group">
-                <label for="password">PASSWORD</label>
-                <input type="password" id="password" placeholder="Ingrese contraseña">
+                <input type="text" id="username" placeholder="USERNAME">
+                <input type="password" id="password" placeholder="PASSWORD">
             </div>
             <button id="login-btn" onclick="iniciarSesion()">LOGIN</button>
         </div>
     </div>
 
-    <!-- Panel de Bitácora (Oculto hasta iniciar sesión) -->
     <div id="dashboard-section" class="dashboard-container" style="display: none;">
         <header>
-            <h2>Bitácora Electrónica de Seguimiento de Viajes</h2>
+            <h2>Bitácora Electrónica</h2>
             <button onclick="cerrarSesion()">Cerrar Sesión</button>
         </header>
-        
         <div class="controls">
-            <label class="btn-file">
-                📁 Cargar Base de Datos (Excel)
+            <label class="btn-file">📁 Cargar Base de Datos
                 <input type="file" id="excel-file" accept=".xlsx, .xls" onchange="cargarExcel(event)">
             </label>
-            <button onclick="exportarExcel()" class="btn-success">💾 Descargar Respaldo Excel</button>
+            <button onclick="exportarExcel()" class="btn-success">💾 Descargar Respaldo</button>
         </div>
-
-        <div class="table-responsive">
-            <table id="viajes-table">
-                <thead>
-                    <tr>
-                        <th>ID Viaje</th>
-                        <th>Cliente</th>
-                        <th>Origen</th>
-                        <th>Destino</th>
-                        <th>Estatus Actual</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="6" style="text-align: center;">Cargue un archivo de Excel para ver los datos.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table id="viajes-table">
+            <thead>
+                <tr><th>ID Viaje</th><th>Cliente</th><th>Origen</th><th>Destino</th><th>Estatus</th><th>Acción</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 
     <script src="app.js"></script>
