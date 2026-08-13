@@ -7,7 +7,11 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background-color: #000000;
+            /* Imagen de fondo wall.png con cobertura total y oscurecedor para mantener contraste */
+            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('wall.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100vh;
@@ -17,11 +21,11 @@
             overflow: hidden;
         }
 
-        /* ENCABEZADO: Tipografía minimalista y corporativa con destello */
+        /* ENCABEZADO: Tipografía elegante y corporativa con destello */
         .header-text {
             text-align: center;
             padding-top: 20px;
-            font-size: 19px;
+            font-size: clamp(12px, 1.5vw, 16px);
             font-weight: 400;
             letter-spacing: 3px;
             white-space: nowrap;
@@ -91,11 +95,11 @@
         .login-panel {
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Alineado a la izquierda del bloque interno */
+            align-items: flex-start;
             width: 380px;
         }
 
-        /* IMAGEN SILUETA.PNG ALINEADA A LOS INPUTS SEGÚN TU LÍNEA AZUL */
+        /* IMAGEN SILUETA.PNG ALINEADA CON TU CÁLCULO EXACTO */
         .silueta-container {
             width: 70px;
             height: 70px;
@@ -108,7 +112,6 @@
             margin-bottom: 25px;
             box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
             overflow: hidden;
-            /* Empujamos la silueta exactamente al eje de los inputs y botón (dejando espacio para la etiqueta "USERNAME") */
             margin-left: calc(100% - 260px + (260px - 70px) / 2); 
         }
 
@@ -146,6 +149,11 @@
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 8px rgba(0, 150, 255, 0.1);
         }
 
+        .input-group input:focus {
+            border-color: #00ffff;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 12px rgba(0, 255, 255, 0.4);
+        }
+
         /* BOTÓN LOGIN OVALADO CENTRADO CON LOS INPUTS */
         .login-btn {
             background: linear-gradient(to bottom, #004b7a, #001a33);
@@ -163,7 +171,7 @@
             box-shadow: 0 0 20px rgba(0, 110, 255, 0.5);
             margin-top: 15px;
             width: 260px;
-            align-self: flex-end; /* Alineado perfectamente al ancho de los inputs */
+            align-self: flex-end;
         }
         .login-btn:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
         .login-btn span { color: #00ffff; font-size: 18px; font-weight: bold; }
@@ -207,7 +215,7 @@
 
         <!-- LOGIN -->
         <div class="login-panel">
-            <!-- SILUETA ALINEADA A LOS INPUTS -->
+            <!-- SILUETA ALINEADA -->
             <div class="silueta-container">
                 <img src="silueta.png" alt="Silueta Usuario">
             </div>
