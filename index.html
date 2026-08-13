@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GS3 - Login</title>
-    <!-- CORRECCIÓN: Enlace correcto para importar Montserrat desde Google Fonts -->
-    <link href="https://googleapis.com" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: #000000;
             color: #ffffff;
-            /* CAMBIO: Aplicada la tipografía Montserrat de forma global */
-            font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -24,13 +21,12 @@
         .header-text {
             text-align: center;
             padding-top: 20px;
-            font-size: 25px;
+            font-size: 18px;
             font-weight: 700;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             white-space: nowrap;
             text-transform: uppercase;
-            /* CAMBIO: Se usa Montserrat para unificar la identidad corporativa elegante */
-            font-family: 'Montserrat', sans-serif; 
+            font-family: 'Courier New', Courier, monospace; /* Toque técnico/militar */
             
             /* Animación de destello brillante de izquierda a derecha */
             background: linear-gradient(90deg, #ffffff 0%, #00ffff 50%, #ffffff 100%);
@@ -77,7 +73,7 @@
             width: 420px;
         }
 
-        /* CONTENEDOR DEL VECTOR DE USUARIO CON ESTILO IMPONENTE */
+        /* IMAGEN SILUETA.PNG CENTRADA */
         .silueta-container {
             width: 75px;
             height: 75px;
@@ -90,14 +86,12 @@
             margin-bottom: 25px;
             box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
             overflow: hidden;
-            /* CAMBIO: Color gris claro/blanco para el vector interno */
-            color: #e0e6ed; 
         }
 
-        /* Ajuste del tamaño del vector SVG */
-        .silueta-container svg {
-            width: 55%;
-            height: 55%;
+        .silueta-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* CUADROS DE TEXTO Y ETIQUETAS */
@@ -115,7 +109,6 @@
             letter-spacing: 1px;
             margin-right: 20px;
             text-align: right;
-            font-weight: 700;
         }
 
         .input-group input {
@@ -127,7 +120,6 @@
             color: #00ffff;
             outline: none;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 8px rgba(0, 150, 255, 0.1);
-            font-family: 'Montserrat', sans-serif;
         }
 
         /* BOTÓN LOGIN OVALADO */
@@ -146,8 +138,6 @@
             box-shadow: 0 0 20px rgba(0, 110, 255, 0.5);
             margin-top: 15px;
             margin-left: 100px;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 1px;
         }
         .login-btn:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
         .login-btn span { color: #00ffff; font-size: 18px; font-weight: bold; }
@@ -179,7 +169,7 @@
 
     <!-- LEYENDA SUPERIOR CON DESTELLO -->
     <div class="header-text">
-        Servicio Global de Seguridad y Sistemas Privados GS3 S.A. DE C.V.
+        SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.
     </div>
 
     <!-- CONTENEDOR CENTRAL -->
@@ -191,11 +181,9 @@
 
         <!-- LOGIN -->
         <div class="login-panel">
-            <!-- ICONO VECTORIAL DE USUARIO -->
+            <!-- IMAGEN SILUETA.PNG -->
             <div class="silueta-container">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
+                <img src="silueta.png" alt="Silueta Usuario">
             </div>
             
             <div class="input-group">
