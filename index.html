@@ -3,689 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GS3 - Centro de Monitoreo y Seguimiento</title>
+    <title>GS3 - Login</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)), url('wall.png');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('wall.png');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-        }
-
-        /* ENCABEZADO SUPERIOR */
-        .header {
-            background: rgba(5, 10, 15, 0.9);
-            border-bottom: 1px solid #1f3b5c;
-            padding: 15px 30px;
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-title {
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(90deg, #bbbbbb 0%, #ffffff 50%, #bbbbbb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .user-status {
-            font-size: 12px;
-            color: #00ffff;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #00ffcc;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #00ffcc;
-        }
-
-        /* DISEÑO GENERAL CON LAYOUT DE BITÁCORAS A LA IZQUIERDA */
-        .main-layout {
-            max-width: 1500px;
-            margin: 20px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 25px;
-            flex-grow: 1;
-            width: 100%;
-        }
-
-        /* PANEL LATERAL DE BITÁCORAS */
-        .sidebar-bitacoras {
-            background: rgba(10, 18, 28, 0.85);
-            border: 1px solid #1f3b5c;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 0 20px rgba(0, 100, 255, 0.15);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .sidebar-title {
-            font-size: 12px;
-            letter-spacing: 1.5px;
-            color: #00ffff;
-            text-transform: uppercase;
-            border-bottom: 1px solid #1f3b5c;
-            padding-bottom: 8px;
-        }
-
-        .bitacora-item {
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: all 0.2s;
-        }
-
-        /* Bitácora Activa (Azul) */
-        .bitacora-activa {
-            background: rgba(0, 150, 255, 0.15);
-            border-color: #0099ff;
-            color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 150, 255, 0.3);
-        }
-
-        /* Bitácora por Activar (Gris) */
-        .bitacora-inactiva {
-            background: rgba(100, 110, 120, 0.15);
-            border-color: #4a5568;
-            color: #a0aec0;
-        }
-
-        .bitacora-item span {
-            font-size: 10px;
-            opacity: 0.8;
-        }
-
-        /* CONTENEDOR DE FORMULARIOS Y CONTENIDO PRINCIPAL */
-        .content-area {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .forms-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
-        .card {
-            background: rgba(10, 18, 28, 0.85);
-            border: 1px solid #1f3b5c;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 100, 255, 0.15);
-            max-height: 450px;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .card-header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #1f3b5c;
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-        }
-
-        .card-title {
-            font-size: 13px;
-            letter-spacing: 2px;
-            color: #00ffff;
-            text-transform: uppercase;
-        }
-
-        /* ÍCONO DE LÁPIZ PARA EDITAR */
-        .edit-icon {
-            background: #192533;
-            border: 1px solid #1f3b5c;
-            color: #00ffff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: background 0.2s;
-        }
-        .edit-icon:hover {
-            background: #004b7a;
-        }
-
-        /* FORMULARIOS Y CAMPOS */
-        .form-row {
-            display: grid;
-            grid-template-columns: 130px 1fr;
-            align-items: center;
-            margin-bottom: 12px;
-            gap: 10px;
-        }
-
-        .form-row label {
-            color: #7b93a8;
-            font-size: 11px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .form-row input, .form-row select {
-            width: 100%;
-            background: linear-gradient(to bottom, #192533, #0b1118);
-            border: 1px solid #1f3b5c;
-            border-radius: 4px;
-            padding: 8px 10px;
-            color: #00ffff;
-            font-size: 12px;
-            outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .form-row input:focus, .form-row select:focus {
-            border-color: #00ffff;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 0 8px rgba(0, 255, 255, 0.3);
-        }
-
-        /* BLOQUEO DE CAMPOS CUANDO ESTÁN GUARDADOS */
-        .bloqueado input, .bloqueado select {
-            background: #0a1017 !important;
-            color: #8899aa !important;
-            border-color: #112233 !important;
-            pointer-events: none;
-        }
-
-        /* SECCIÓN DE REMOLQUE FULL */
-        .full-section {
-            display: none;
-            border-left: 2px solid #00ffff;
-            padding-left: 10px;
-            margin-top: 10px;
-            background: rgba(0, 191, 255, 0.03);
-        }
-
-        /* CONTENEDOR DE MULTITRANSPORTES ADICIONALES */
-        .transporte-extra-box {
-            border-top: 1px dashed #1f3b5c;
-            margin-top: 15px;
-            padding-top: 15px;
-        }
-
-        .btn-add-transporte {
-            background: transparent;
-            border: 1px dashed #005a9e;
-            color: #00ffff;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 11px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .btn-add-transporte:hover {
-            background: rgba(0, 90, 158, 0.2);
-        }
-
-        /* SECCIÓN INFERIOR DE REPORTES Y BITÁCORA */
-        .bottom-section {
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 0 20px 20px 20px;
-            width: 100%;
-        }
-
-        .report-box {
-            display: grid;
-            grid-template-columns: 2fr 2fr 1.5fr auto;
-            gap: 15px;
-            align-items: center;
-            background: rgba(10, 18, 28, 0.85);
-            border: 1px solid #1f3b5c;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 100, 255, 0.15);
-        }
-
-        .btn-action {
-            background: linear-gradient(to bottom, #004b7a, #001a33);
-            border: 1px solid #005a9e;
-            border-radius: 20px;
-            padding: 10px 25px;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 110, 255, 0.4);
-            text-transform: uppercase;
-            transition: background 0.3s;
-            white-space: nowrap;
-        }
-        .btn-action:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
-
-        /* TABLA DE HISTORIAL DE REPORTES */
-        .history-table-container {
-            max-width: 1500px;
-            margin: 0 auto 40px auto;
-            padding: 0 20px;
-            width: 100%;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(10, 18, 28, 0.85);
-            border: 1px solid #1f3b5c;
-            border-radius: 8px;
             overflow: hidden;
         }
 
-        th, td {
-            padding: 10px 15px;
-            text-align: left;
-            font-size: 11px;
-            border-bottom: 1px solid #1f3b5c;
-        }
-
-        th {
-            background: #111d2d;
-            color: #00ffff;
-            letter-spacing: 1px;
+        /* ENCABEZADO PRINCIPAL */
+        .header-text {
+            text-align: center;
+            padding-top: 20px;
+            font-size: clamp(12px, 1.5vw, 16px);
+            font-weight: 400;
+            letter-spacing: 3px;
+            white-space: nowrap;
             text-transform: uppercase;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            
+            background: linear-gradient(90deg, #bbbbbb 0%, #ffffff 50%, #bbbbbb 100%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 5s linear infinite;
         }
 
-        td { color: #d1f4ff; }
-        .anomaly-badge { color: #ff4d4d; font-weight: bold; }
-        .normal-badge { color: #00ffcc; font-weight: bold; }
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* CONTENEDOR CENTRAL */
+        .main-content {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 80px;
+            flex-grow: 1;
+        }
+
+        /* LOGO CON ONDA DE ENERGÍA */
+        .logo-container {
+            width: 450px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container img {
+            width: 100%;
+            display: block;
+            -webkit-mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
+            mask-image: radial-gradient(circle at center, black 45%, transparent 72%);
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-container::after {
+            content: '';
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            border: 2px dashed rgba(0, 191, 255, 0.4);
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.3), inset 0 0 25px rgba(0, 150, 255, 0.3);
+            animation: pulse-ring 4s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.3; }
+            50% { transform: scale(1.05); opacity: 0.8; box-shadow: 0 0 40px rgba(0, 220, 255, 0.7), inset 0 0 40px rgba(0, 220, 255, 0.7); }
+            100% { transform: scale(0.95); opacity: 0.3; }
+        }
+
+        /* PANEL DE LOGIN */
+        .login-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 380px;
+        }
+
+        .silueta-container {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid #1f3b5c;
+            background: radial-gradient(circle, #0f1b29, #000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.4);
+            overflow: hidden;
+            margin-left: calc(100% - 260px + (260px - 70px) / 2); 
+        }
+
+        .silueta-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            color: #7b93a8;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-align: left;
+            width: 90px;
+        }
+
+        .input-group input {
+            width: 260px;
+            background: linear-gradient(to bottom, #192533, #0b1118);
+            border: 1px solid #1f3b5c;
+            border-radius: 4px;
+            padding: 12px;
+            color: #00ffff;
+            outline: none;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 8px rgba(0, 150, 255, 0.1);
+        }
+
+        .input-group input:focus {
+            border-color: #00ffff;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.9), 0 0 12px rgba(0, 255, 255, 0.4);
+        }
+
+        .login-btn {
+            background: linear-gradient(to bottom, #004b7a, #001a33);
+            border: 1px solid #005a9e;
+            border-radius: 25px;
+            padding: 10px 45px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 110, 255, 0.5);
+            margin-top: 15px;
+            width: 260px;
+            align-self: flex-end;
+        }
+        .login-btn:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
+        .login-btn span { color: #00ffff; font-size: 18px; font-weight: bold; }
+
+        /* ESPACIADOR INFERIOR PARA MANTENER LA SIMETRÍA */
+        .bottom-spacer {
+            height: 30px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ENCABEZADO -->
-    <div class="header">
-        <div class="header-title">SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.</div>
-        <div class="user-status">
-            <span class="status-dot"></span> CENTRO DE MONITOREO ACTIVO
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="header-text">
+        SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.
+    </div>
+
+    <!-- CONTENEDOR CENTRAL -->
+    <div class="main-content">
+        <!-- LOGO CON ONDA DE ENERGÍA -->
+        <div class="logo-container">
+            <img src="logo-gs3.png" alt="Logo GS3">
+        </div>
+
+        <!-- LOGIN -->
+        <div class="login-panel">
+            <div class="silueta-container">
+                <img src="silueta.png" alt="Silueta Usuario">
+            </div>
+            
+            <div class="input-group">
+                <label>USERNAME</label>
+                <input type="text">
+            </div>
+            
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password">
+            </div>
+            
+            <button class="login-btn">
+                <span>✓</span> LOGIN
+            </button>
         </div>
     </div>
 
-    <!-- LAYOUT PRINCIPAL -->
-    <div class="main-layout">
-        
-        <!-- BARRA LATERAL: BITÁCORAS ACTIVAS Y POR ACTIVAR -->
-        <div class="sidebar-bitacoras">
-            <div class="sidebar-title">Bitácoras de Ruta</div>
-            
-            <div class="bitacora-item bitacora-activa">
-                <strong>BIT-2026-001</strong>
-                <span>Cliente: DICSA | Activa</span>
-            </div>
-            <div class="bitacora-item bitacora-inactiva">
-                <strong>BIT-2026-002</strong>
-                <span>Cliente: FIMASA | Por activar</span>
-            </div>
-            <div class="bitacora-item bitacora-inactiva">
-                <strong>BIT-2026-003</strong>
-                <span>Cliente: BONATTI | Por activar</span>
-            </div>
-            <div class="bitacora-item bitacora-inactiva">
-                <strong>BIT-2026-004</strong>
-                <span>Cliente: AKOPLA | Por activar</span>
-            </div>
-        </div>
+    <!-- ESPACIADOR INFERIOR -->
+    <div class="bottom-spacer"></div>
 
-        <!-- ÁREA DE FORMULARIOS -->
-        <div class="content-area">
-            <div class="forms-grid">
-                
-                <!-- COLUMNA 1: GENERALES, CLIENTE Y RUTA -->
-                <div class="card" id="card-generales">
-                    <div class="card-header-flex">
-                        <div class="card-title">1. Datos Generales y Ruta</div>
-                        <button class="edit-icon" onclick="toggleEdicion('card-generales', this)" title="Modificar información">✏️ Editar</button>
-                    </div>
-                    
-                    <div class="form-row">
-                        <label>No. Bitácora</label>
-                        <input type="text" id="bitacora" value="BIT-2026-001">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Cliente</label>
-                        <select id="cliente">
-                            <option value="Dicsa" selected>Dicsa</option>
-                            <option value="Fimasa">Fimasa</option>
-                            <option value="Reach">Reach</option>
-                            <option value="Akopla">Akopla</option>
-                            <option value="Dankel">Dankel</option>
-                            <option value="Dankel Erika Villalobos">Dankel Erika Villalobos</option>
-                            <option value="Bonatti">Bonatti</option>
-                            <option value="Cesco">Cesco</option>
-                            <option value="Cinvestav">Cinvestav</option>
-                            <option value="G&G">G&G</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row">
-                        <label>Origen</label>
-                        <input type="text" id="origen" value="Monterrey, NL">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Destino</label>
-                        <input type="text" id="destino" value="CDMX">
-                    </div>
-
-                    <div class="card-title" style="margin: 20px 0 10px 0; font-size: 11px;">Datos de Custodia</div>
-                    
-                    <div class="form-row">
-                        <label>Custodio(s)</label>
-                        <input type="text" id="custodia-nombre" value="Elemento Alpha / Beta">
-                    </div>
-                    <div class="form-row">
-                        <label>Portátiles</label>
-                        <input type="text" id="custodia-portatiles" value="Rad-12, Rad-15">
-                    </div>
-                    <div class="form-row">
-                        <label>Placas Custodia</label>
-                        <input type="text" id="custodia-placas" value="ABC-123-A">
-                    </div>
-                    <div class="form-row">
-                        <label>Vehículo</label>
-                        <input type="text" id="custodia-vehiculo" value="Patrulla Charger 2024">
-                    </div>
-                </div>
-
-                <!-- COLUMNA 2: DATOS DE TRANSPORTE -->
-                <div class="card" id="card-transporte">
-                    <div class="card-header-flex">
-                        <div class="card-title">2. Datos de Transporte</div>
-                        <button class="edit-icon" onclick="toggleEdicion('card-transporte', this)" title="Modificar información">✏️ Editar</button>
-                    </div>
-
-                    <div class="form-row">
-                        <label>Operador</label>
-                        <input type="text" id="operador" value="Roberto Gómez Bolaños">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Teléfono</label>
-                        <input type="text" id="telefono" value="5512345678">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Tipo de Unidad</label>
-                        <select id="tipo-unidad" onchange="verificarUnidadFull()">
-                            <option value="Particular">Particular</option>
-                            <option value="Camioneta 1.5">Camioneta 1.5</option>
-                            <option value="Camioneta 3.5">Camioneta 3.5</option>
-                            <option value="Camión">Camión</option>
-                            <option value="Mudanzero">Mudanzero</option>
-                            <option value="Rabón">Rabón</option>
-                            <option value="Torton">Torton</option>
-                            <option value="Tráiler">Tráiler</option>
-                            <option value="Full" selected>Full</option>
-                            <option value="Low Boy">Low Boy</option>
-                            <option value="Góndola">Góndola</option>
-                            <option value="Auto tanque">Auto tanque</option>
-                            <option value="Jaula">Jaula</option>
-                            <option value="Tolva">Tolva</option>
-                            <option value="Eco">Eco</option>
-                            <option value="Placas">Placas</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row">
-                        <label>Eco</label>
-                        <input type="text" id="eco" value="ECO-88">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Placas</label>
-                        <input type="text" id="placas" value="78-AK-9Z">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Marca / Modelo</label>
-                        <input type="text" id="marca-modelo" value="Kenworth T800">
-                    </div>
-
-                    <div class="form-row">
-                        <label>NIV</label>
-                        <input type="text" id="niv" value="3AKV2X9012838">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Motor</label>
-                        <input type="text" id="motor" value="Cummins X15">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Eco Remolque</label>
-                        <input type="text" id="eco-rem" value="REM-01">
-                    </div>
-
-                    <div class="form-row">
-                        <label>Placas Remolque</label>
-                        <input type="text" id="placas-rem" value="45-UA-2X">
-                    </div>
-
-                    <!-- SECCIÓN DINÁMICA EXCLUSIVA PARA FULL -->
-                    <div id="seccion-full" class="full-section" style="display: block;">
-                        <div class="form-row" style="margin-top: 10px;">
-                            <label style="color: #00ffff;">Eco Rem 2</label>
-                            <input type="text" id="eco-rem2" value="REM-02">
-                        </div>
-                        <div class="form-row" style="margin-bottom: 10px;">
-                            <label style="color: #00ffff;">Placas Rem 2</label>
-                            <input type="text" id="placas-rem2" value="46-UB-2X">
-                        </div>
-                    </div>
-
-                    <!-- BOTÓN PARA AGREGAR MÚLTIPLES TRANSPORTES -->
-                    <div class="transporte-extra-box">
-                        <button class="btn-add-transporte" onclick="agregarTransporteAdicional()">+ Agregar otro transporte al convoy</button>
-                        <div id="contenedor-transportes-extras"></div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-    <!-- SECCIÓN DE REPORTE Y ANOMALÍAS -->
-    <div class="bottom-section">
-        <div class="report-box">
-            <div>
-                <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">REPORTE / UBICACIÓN MANUAL</label>
-                <input type="text" id="ubicacion-reporte" placeholder="Ej. Km 45 Autopista..." style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; outline: none;">
-            </div>
-
-            <div>
-                <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">ANOMALÍA / SITUACIÓN OPERATIVA</label>
-                <select id="anomalia-select" style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; outline: none;">
-                    <option value="Sin novedad">Sin novedad</option>
-                    <option value="Arribo a punto de cita">Arribo a punto de cita</option>
-                    <option value="Inicio de servicio">Inicio de servicio</option>
-                    <option value="Arribo a punto de entrega">Arribo a punto de entrega</option>
-                    <option value="Ingreso a punto de entrega">Ingreso a punto de entrega</option>
-                    <option value="Termino y liberación de servicio">Término y liberación de servicio</option>
-                    <option value="Arribo a punto de resguardo">Arribo a punto de resguardo</option>
-                    <option value="Ingreso a punto de resguardo">Ingreso a punto de resguardo</option>
-                    <option value="En espera de salida a ruta">En espera de salida a ruta</option>
-                    <option value="Semáforo rojo">Semáforo rojo</option>
-                    <option value="En revisión aduanal">En revisión aduanal</option>
-                    <option value="Revisión policial">Revisión policial</option>
-                    <option value="Reten militar">Retén militar</option>
-                    <option value="Cruce de caseta">Cruce de caseta</option>
-                    <option value="Detencion por alimentos">Detención por alimentos</option>
-                    <option value="Carga vehicular">Carga vehicular</option>
-                    <option value="Cierre de vialidad">Cierre de vialidad</option>
-                    <option value="Falla mecanica">Falla mecánica</option>
-                    <option value="Percance">Percance</option>
-                    <option value="Desvio de ruta">Desvío de ruta</option>
-                    <option value="Detencion no autorizada">Detención no autorizada</option>
-                    <option value="Perdida de comunicación">Pérdida de comunicación</option>
-                    <option value="Siniestro">Siniestro</option>
-                </select>
-            </div>
-
-            <div>
-                <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">FECHA Y HORA</label>
-                <div style="font-size: 12px; color: #00ffcc; padding-top: 5px;" id="reloj-actual">--/--/---- --:--:--</div>
-            </div>
-
-            <div style="text-align: right;">
-                <button class="btn-action" onclick="guardarSeguimiento()">Guardar Reporte</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- TABLA DE HISTORIAL DE SEGUIMIENTO -->
-    <div class="history-table-container">
-        <div class="card-title" style="margin-bottom: 12px;">Historial Cronológico de Bitácora</div>
-        <table id="tabla-bitacora">
-            <thead>
-                <tr>
-                    <th>Fecha y Hora</th>
-                    <th>Bitácora</th>
-                    <th>Cliente</th>
-                    <th>Ubicación / Reporte</th>
-                    <th>Estatus / Situación</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>13/08/2026 08:30:15</td>
-                    <td>BIT-2026-001</td>
-                    <td>Dicsa</td>
-                    <td>Salida de planta origen Monterrey</td>
-                    <td><span class="normal-badge">Inicio de servicio</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- SCRIPT DE CONTROL Y LÓGICA -->
-    <script>
-        // Reloj en tiempo real
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('reloj-actual').textContent = now.toLocaleString('es-MX');
-        }, 1000);
-
-        // Bloquear campos al iniciar la vista (simulando que ya están guardados)
-        window.onload = function() {
-            document.getElementById('card-generales').classList.add('bloqueado');
-            document.getElementById('card-transporte').classList.add('bloqueado');
-        };
-
-        // Función para alternar entre bloqueo y edición con el ícono de lápiz
-        function toggleEdicion(cardId, btn) {
-            const card = document.getElementById(cardId);
-            const estaBloqueado = card.classList.contains('bloqueado');
-
-            if (estaBloqueado) {
-                card.classList.remove('bloqueado');
-                btn.textContent = "💾 Guardar";
-                btn.style.background = "#004b7a";
-            } else {
-                card.classList.add('bloqueado');
-                btn.textContent = "✏️ Editar";
-                btn.style.background = "#192533";
-            }
-        }
-
-        // Lógica para mostrar/ocultar remolque 2 si es Full
-        function verificarUnidadFull() {
-            const tipoUnidad = document.getElementById('tipo-unidad').value;
-            const seccionFull = document.getElementById('seccion-full');
-            if (tipoUnidad === 'Full') {
-                seccionFull.style.display = 'block';
-            } else {
-                seccionFull.style.display = 'none';
-                document.getElementById('eco-rem2').value = '';
-                document.getElementById('placas-rem2').value = '';
-            }
-        }
-
-        // Función para agregar un transporte extra al convoy
-        function agregarTransporteAdicional() {
-            const container = document.getElementById('contenedor-transportes-extras');
-            const index = container.children.length + 1;
-            
-            const div = document.createElement('div');
-            div.style.cssText = "border: 1px solid #1f3b5c; padding: 10px; border-radius: 6px; margin-top: 10px; background: rgba(0,0,0,0.2);";
-            div.innerHTML = `
-                <div style="font-size: 11px; color: #00ffff; margin-bottom: 8px;">Transporte Adicional #${index}</div>
-                <div class="form-row"><label>Operador</label><input type="text" placeholder="Nombre"></div>
-                <div class="form-row"><label>Eco / Placas</label><input type="text" placeholder="Eco y Placas"></div>
-            `;
-            container.appendChild(div);
-        }
-
-        // Guardar reporte cronológico
-        function guardarSeguimiento() {
-            const bitacora = document.getElementById('bitacora').value.trim();
-            const cliente = document.getElementById('cliente').value;
-            const ubicacion = document.getElementById('ubicacion-reporte').value.trim();
-            const anomalia = document.getElementById('anomalia-select').value;
-            const fechaHora = document.getElementById('reloj-actual').textContent;
-
-            if (!ubicacion) {
-                alert('Por favor, escriba la ubicación o reporte actual.');
-                document.getElementById('ubicacion-reporte').focus();
-                return;
-            }
-
-            const tabla = document.getElementById('tabla-bitacora').getElementsByTagName('tbody')[0];
-            const nuevaFila = tabla.insertRow(0);
-
-            nuevaFila.insertCell(0).textContent = fechaHora;
-            nuevaFila.insertCell(1).textContent = bitacora;
-            nuevaFila.insertCell(2).textContent = cliente;
-            nuevaFila.insertCell(3).textContent = ubicacion;
-            
-            const celdaAnomalia = nuevaFila.insertCell(4);
-            celdaAnomalia.textContent = anomalia;
-
-            if (anomalia.includes('Sin novedad') || anomalia.includes('cita') || anomalia.includes('servicio') || anomalia.includes('entrega') || anomalia.includes('resguardo') || anomalia.includes('caseta')) {
-                celdaAnomalia.className = 'normal-badge';
-            } else {
-                celdaAnomalia.className = 'anomaly-badge';
-            }
-
-            // Limpiar caja de reporte
-            document.getElementById('ubicacion-reporte').value = '';
-            document.getElementById('anomalia-select').selectedIndex = 0;
-            
-            alert('¡Reporte guardado con éxito en el historial!');
-        }
-    </script>
 </body>
 </html>
