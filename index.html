@@ -95,6 +95,7 @@
             flex-direction: column;
             align-items: flex-start;
             width: 380px;
+            position: relative;
         }
 
         .silueta-container {
@@ -167,11 +168,25 @@
             margin-top: 15px;
             width: 260px;
             align-self: flex-end;
+            transition: background 0.3s ease;
         }
         .login-btn:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
         .login-btn span { color: #00ffff; font-size: 18px; font-weight: bold; }
 
-        /* ESPACIADOR INFERIOR PARA MANTENER LA SIMETRÍA */
+        /* ESTILO PARA MENSAJE DE ERROR */
+        #error-msg {
+            color: #ff4d4d;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-align: right;
+            width: 260px;
+            align-self: flex-end;
+            margin-top: 8px;
+            min-height: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
         .bottom-spacer {
             height: 30px;
         }
@@ -199,22 +214,84 @@
             
             <div class="input-group">
                 <label>USERNAME</label>
-                <input type="text">
+                <input type="text" id="username" placeholder="">
             </div>
             
             <div class="input-group">
                 <label>PASSWORD</label>
-                <input type="password">
+                <input type="password" id="password" placeholder="">
             </div>
             
-            <button class="login-btn">
+            <button class="login-btn" id="login-btn">
                 <span>✓</span> LOGIN
             </button>
+            <div id="error-msg"></div>
         </div>
     </div>
 
     <!-- ESPACIADOR INFERIOR -->
     <div class="bottom-spacer"></div>
 
+    <!-- SCRIPT DE VALIDACIÓN DE INICIO DE SESIÓN -->
+    <script>
+        const loginBtn = document.getElementById('login-btn');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const errorMsg = document.getElementById('error-msg');
+
+        function realizarLogin() {
+            const user = usernameInput.value.trim();
+            const pass = passwordInput.value.trim();
+
+            // Credenciales de prueba (puedes cambiarlas o enlazarlas a tu backend después)
+            const usuarioValido = "admin";
+            const passwordValido = "gs32026";
+
+            if (user === "" || pass === "") {
+                mostrarError("INGRESE USUARIO Y CONTRASEÑA");
+                return;
+            }
+
+            if (user === usuarioValido && pass === passwordValido) {
+                errorMsg.style.opacity = "0";
+                loginBtn.innerHTML = "<span>⟳</span> ACCEDIENDO...";
+                loginBtn.style.pointerEvents = "none";
+
+                // Simula una breve carga de seguridad y redirige al dashboard (puedes cambiar 'dashboard.html' por tu siguiente vista)
+                setTimeout(() => {
+                    alert("¡Acceso concedido con éxito!");
+                    // window.location.href = "dashboard.html"; 
+                }, 1000);
+            } else {
+                mostrarError("CREDENCIALES INCORRECTAS");
+                passwordInput.value = "";
+                passwordInput.focus();
+            }
+        }
+
+        function mostrarError(mensaje) {
+            errorMsg.textContent = mensaje;
+            errorMsg.style.opacity = "1";
+            setTimeout(() => {
+                errorMsg.style.opacity = "0";
+            }, 3000);
+        }
+
+        // Evento al hacer clic en el botón
+        loginBtn.addEventListener('click', realizarLogin);
+
+        // Evento al presionar la tecla Enter dentro de los campos
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                realizarLogin();
+            }
+        });
+        
+        usernameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                passwordInput.focus();
+            }
+        });
+    </script>
 </body>
 </html>
