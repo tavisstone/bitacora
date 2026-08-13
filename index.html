@@ -3,43 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GS3 - Bitácora</title>
+    <title>GS3 - Bitácora de Custodias</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="login-section" class="login-container">
-        <div class="logo-box">
-            <img src="logo-gs3.png" alt="Logo GS3">
-        </div>
-        <div class="login-box">
-            <h2>SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.</h2>
-            <div class="form-group">
-                <input type="text" id="username" placeholder="USERNAME">
-                <input type="password" id="password" placeholder="PASSWORD">
+    <!-- Pantalla de Login -->
+    <div id="login-section" class="login-page-container">
+        
+        <!-- Leyenda Superior en una sola línea -->
+        <header class="top-header">
+            SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.
+        </header>
+
+        <!-- Contenido Central (Logo y Formulario) -->
+        <div class="main-content">
+            <!-- Lado Izquierdo: Logo con difuminado -->
+            <div class="logo-box">
+                <img src="logo-gs3.png" alt="Logo GS3">
             </div>
-            <button id="login-btn" onclick="iniciarSesion()">LOGIN</button>
+
+            <!-- Lado Derecho: Panel de Login -->
+            <div class="login-panel">
+                <!-- Icono de Huella Digital -->
+                <div class="fingerprint-icon">
+                    <div class="inner-print"></div>
+                </div>
+
+                <div class="input-row">
+                    <span class="input-label">USERNAME</span>
+                    <div class="tech-input-container">
+                        <input type="text" id="username">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <span class="input-label">PASSWORD</span>
+                    <div class="tech-input-container">
+                        <input type="password" id="password">
+                    </div>
+                </div>
+
+                <button id="login-btn" onclick="iniciarSesion()">
+                    <span class="check-icon">✓</span> LOGIN
+                </button>
+            </div>
         </div>
+
+        <!-- Pie de página con asociaciones y redes -->
+        <footer class="bottom-footer">
+            <div class="associations">
+                <span class="assoc-badge">AMESP</span>
+                <span class="assoc-badge">ASIS</span>
+                <span class="assoc-badge">ALAS</span>
+            </div>
+            <div class="social-icons">
+                <div class="social-btn fb">f</div>
+                <div class="social-btn ig">📷</div>
+                <div class="social-btn tw">🐦</div>
+                <div class="social-btn in">in</div>
+                <div class="social-btn web">🌐</div>
+            </div>
+        </footer>
+
     </div>
 
+    <!-- Panel de Bitácora (Oculto inicialmente) -->
     <div id="dashboard-section" class="dashboard-container" style="display: none;">
-        <header>
-            <h2>Bitácora Electrónica</h2>
-            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        <header class="dashboard-header">
+            <h2>Bitácora Electrónica de Seguimiento</h2>
+            <button onclick="cerrarSesion()" class="btn-danger">Cerrar Sesión</button>
         </header>
         <div class="controls">
-            <label class="btn-file">📁 Cargar Base de Datos
+            <label class="btn-file">📁 Cargar Base de Datos (Excel)
                 <input type="file" id="excel-file" accept=".xlsx, .xls" onchange="cargarExcel(event)">
             </label>
             <button onclick="exportarExcel()" class="btn-success">💾 Descargar Respaldo</button>
         </div>
-        <table id="viajes-table">
-            <thead>
-                <tr><th>ID Viaje</th><th>Cliente</th><th>Origen</th><th>Destino</th><th>Estatus</th><th>Acción</th></tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="viajes-table">
+                <thead>
+                    <tr><th>ID Viaje</th><th>Cliente</th><th>Origen</th><th>Destino</th><th>Estatus</th><th>Acción</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 
     <script src="app.js"></script>
