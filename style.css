@@ -1,101 +1,264 @@
-/* === ESTILOS GENERALES Y FONDO === */
+/* Configuración base */
 body {
-    background-color: #000; /* Fondo negro absoluto */
-    color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Centra todo verticalmente */
+    overflow: hidden;
+    height: 100vh;
 }
 
-/* === CONTENEDOR PRINCIPAL (Logo + Login) === */
-.login-container {
+/* Contenedor general de la página de login */
+.login-page-container {
     display: flex;
-    flex-direction: row; /* Aínea elementos uno al lado del otro */
-    justify-content: center;
-    align-items: center;
-    gap: 60px; /* Espacio grande entre el logo y el cuadro de login */
-    max-width: 1000px;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 20px 40px;
+    box-sizing: border-box;
+}
+
+/* Leyenda superior en una sola línea */
+.top-header {
+    text-align: center;
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #ffffff;
     width: 100%;
-    padding: 20px;
+    margin-top: 5px;
+    white-space: nowrap;
 }
 
-/* === SECCIÓN DEL LOGO === */
-.logo-box {
-    flex-shrink: 0;
+/* Contenido central (Logo izq / Login der) */
+.main-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    gap: 120px;
 }
 
+/* Logo con difuminado en los bordes para fusionarse con el negro */
 .logo-box img {
-    width: 400px; /* Ajusta el tamaño del logo a tu gusto */
+    width: 500px;
     height: auto;
     display: block;
-    /* Esto es clave: elimina el fondo azul del .png si lo tuviera y lo integra al negro */
-    mix-blend-mode: screen; 
-    /* Opcional: un brillo suave azul alrededor */
-    filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.5)); 
+    -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+    mask-image: radial-gradient(circle, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
 }
 
-/* === SECCIÓN DEL CUADRO DE LOGIN === */
-.login-box {
-    background: #111; /* Fondo gris muy oscuro para el recuadro */
-    padding: 40px;
-    border-radius: 15px; /* Bordes redondeados */
-    border: 1px solid #0056b3; /* Borde azul */
-    width: 350px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra para separar del fondo */
+/* Panel de Login derecho */
+.login-panel {
+    display: flex;
+    flex-direction: column;
+    width: 320px;
 }
 
-/* Título dentro del login */
-.login-box h2 {
-    font-size: 16px;
-    color: #fff;
-    text-align: center;
-    margin-bottom: 30px;
-    line-height: 1.4;
+/* Huella digital superior */
+.fingerprint-icon {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #0b1c2d 0%, #03080f 100%);
+    border: 2px solid #0056b3;
+    border-radius: 50%;
+    margin: 0 auto 25px auto;
+    box-shadow: 0 0 15px rgba(0, 119, 255, 0.4);
+    position: relative;
+}
+.fingerprint-icon::after {
+    content: "🪪";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
 }
 
-/* Campos de Input */
-.form-group input {
+/* Filas de Inputs */
+.input-row {
+    margin-bottom: 18px;
+}
+
+.input-label {
+    display: block;
+    color: #8da4be;
+    font-size: 13px;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.tech-input-container {
+    background: linear-gradient(180deg, #121a24 0%, #070c12 100%);
+    border: 1px solid #1f3b5c;
+    border-radius: 4px;
+    padding: 2px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.tech-input-container input {
     width: 100%;
-    padding: 15px;
-    margin-bottom: 20px;
-    background: #222; /* Fondo oscuro para los inputs */
-    border: 1px solid #333;
-    color: #fff;
-    border-radius: 5px;
-    box-sizing: border-box; /* Para que el padding no agrande el input */
+    background: transparent;
+    border: none;
+    padding: 10px;
+    color: #00ffff;
     font-size: 14px;
-}
-
-.form-group input:focus {
+    box-sizing: border-box;
     outline: none;
-    border-color: #007bff; /* Borde azul al seleccionar */
 }
 
-/* Botón Login */
+/* Botón Login Estilo Tecnológico */
 #login-btn {
     width: 100%;
-    padding: 15px;
-    background: #0056b3; /* Azul corporativo */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    padding: 12px;
+    background: linear-gradient(180deg, #0b4c8c 0%, #02254a 100%);
+    border: 1px solid #1e70cb;
+    color: #ffffff;
     font-weight: bold;
+    font-size: 14px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 86, 179, 0.5);
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 1px;
 }
 
 #login-btn:hover {
-    background: #007bff; /* Azul más claro al pasar el mouse */
+    background: linear-gradient(180deg, #0e5db0 0%, #033366 100%);
+    box-shadow: 0 0 20px rgba(0, 140, 255, 0.8);
 }
 
-/* === OCULTO INICIALMENTE (Dashboard) === */
-.dashboard-container {
-    display: none;
+.check-icon {
+    color: #00ffff;
+    font-weight: bold;
+}
+
+/* Pie de página (Asociaciones y Redes) */
+.bottom-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
-    padding: 20px;
+    padding-bottom: 10px;
+}
+
+.associations {
+    display: flex;
+    gap: 15px;
+}
+
+.assoc-badge {
+    background: #111;
+    border: 1px solid #333;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: #ccc;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.social-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+}
+
+.social-btn.fb { background: #3b5998; }
+.social-btn.ig { background: #e1306c; }
+.social-btn.tw { background: #1da1f2; }
+.social-btn.in { background: #0077b5; }
+.social-btn.web { background: #444; }
+
+/* Dashboard Interno (Bitácora) */
+.dashboard-container {
+    padding: 30px;
+    background: #0a0a0a;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.btn-file {
+    background: #1f3b5c;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    border: 1px solid #0056b3;
+}
+
+.btn-success {
+    background: #1e824c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.btn-danger {
+    background: #c0392b;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.table-responsive {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #222;
+    text-align: left;
+    font-size: 14px;
+}
+
+th {
+    background-color: #004080;
+    color: white;
+}
+
+input[type="file"] {
+    display: none;
 }
