@@ -1,29 +1,101 @@
-body { background-color: #000; color: #fff; font-family: 'Arial', sans-serif; margin: 0; }
-
-.login-container { 
-    display: flex; justify-content: center; align-items: center; 
-    height: 100vh; gap: 50px; padding: 20px; 
+/* === ESTILOS GENERALES Y FONDO === */
+body {
+    background-color: #000; /* Fondo negro absoluto */
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Centra todo verticalmente */
 }
 
-.logo-box img { 
-    width: 400px; 
-    filter: drop-shadow(0 0 20px rgba(0, 110, 255, 0.6)); 
+/* === CONTENEDOR PRINCIPAL (Logo + Login) === */
+.login-container {
+    display: flex;
+    flex-direction: row; /* Aínea elementos uno al lado del otro */
+    justify-content: center;
+    align-items: center;
+    gap: 60px; /* Espacio grande entre el logo y el cuadro de login */
+    max-width: 1000px;
+    width: 100%;
+    padding: 20px;
 }
 
-.login-box { width: 350px; background: #111; padding: 30px; border-radius: 8px; border: 1px solid #333; }
-.login-box h2 { font-size: 14px; color: #00aaff; margin-bottom: 20px; text-align: center; }
-
-.form-group input { 
-    width: 100%; padding: 12px; margin-bottom: 15px; background: #222; 
-    border: 1px solid #444; color: #fff; box-sizing: border-box; 
+/* === SECCIÓN DEL LOGO === */
+.logo-box {
+    flex-shrink: 0;
 }
 
-#login-btn { 
-    width: 100%; padding: 12px; background: #0056b3; border: none; 
-    color: white; cursor: pointer; font-weight: bold; 
+.logo-box img {
+    width: 400px; /* Ajusta el tamaño del logo a tu gusto */
+    height: auto;
+    display: block;
+    /* Esto es clave: elimina el fondo azul del .png si lo tuviera y lo integra al negro */
+    mix-blend-mode: screen; 
+    /* Opcional: un brillo suave azul alrededor */
+    filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.5)); 
 }
 
-.dashboard-container { padding: 40px; display: none; }
-table { width: 100%; border-collapse: collapse; background: #111; }
-th, td { padding: 15px; border: 1px solid #333; text-align: left; }
-th { background-color: #0056b3; }
+/* === SECCIÓN DEL CUADRO DE LOGIN === */
+.login-box {
+    background: #111; /* Fondo gris muy oscuro para el recuadro */
+    padding: 40px;
+    border-radius: 15px; /* Bordes redondeados */
+    border: 1px solid #0056b3; /* Borde azul */
+    width: 350px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra para separar del fondo */
+}
+
+/* Título dentro del login */
+.login-box h2 {
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+/* Campos de Input */
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #222; /* Fondo oscuro para los inputs */
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box; /* Para que el padding no agrande el input */
+    font-size: 14px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff; /* Borde azul al seleccionar */
+}
+
+/* Botón Login */
+#login-btn {
+    width: 100%;
+    padding: 15px;
+    background: #0056b3; /* Azul corporativo */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#login-btn:hover {
+    background: #007bff; /* Azul más claro al pasar el mouse */
+}
+
+/* === OCULTO INICIALMENTE (Dashboard) === */
+.dashboard-container {
+    display: none;
+    width: 100%;
+    padding: 20px;
+}
