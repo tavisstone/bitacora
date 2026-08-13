@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('wall.png');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('wall.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -171,24 +171,9 @@
         .login-btn:hover { background: linear-gradient(to bottom, #005a9e, #002240); }
         .login-btn span { color: #00ffff; font-size: 18px; font-weight: bold; }
 
-        /* NUEVA SECCIÓN INFERIOR: CENTRO DE MONITOREO EN LUGAR DEL FOOTER */
-        .footer-monitor {
-            text-align: center;
-            padding-bottom: 20px;
-        }
-
-        .neon-title {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 6px;
-            color: #e0f7ff;
-            text-transform: uppercase;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            text-shadow: 
-                0 0 5px rgba(0, 180, 255, 0.8),
-                0 0 12px rgba(0, 150, 255, 0.6),
-                0 0 25px rgba(0, 120, 255, 0.5),
-                0 0 50px rgba(0, 100, 255, 0.3);
+        /* ESPACIADOR INFERIOR PARA MANTENER LA SIMETRÍA */
+        .bottom-spacer {
+            height: 30px;
         }
     </style>
 </head>
@@ -228,10 +213,8 @@
         </div>
     </div>
 
-    <!-- PIE DE PÁGINA REEMPLAZADO POR EL TÍTULO NEÓN -->
-    <div class="footer-monitor">
-        <span class="neon-title">CENTRO DE MONITOREO</span>
-    </div>
+    <!-- ESPACIADOR INFERIOR -->
+    <div class="bottom-spacer"></div>
 
 </body>
 </html>
