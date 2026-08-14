@@ -18,6 +18,33 @@
             flex-direction: column;
         }
 
+        /* PANTALLA DE LOGIN */
+        #vista-login {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 10, 15, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .login-card {
+            background: rgba(10, 18, 28, 0.95);
+            border: 1px solid #1f3b5c;
+            border-radius: 8px;
+            padding: 30px;
+            width: 380px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            text-align: center;
+        }
+        .login-title {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #00ffff;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
         /* ENCABEZADO SUPERIOR */
         .header {
             background: rgba(5, 10, 15, 0.9);
@@ -44,7 +71,7 @@
             letter-spacing: 1px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
         .status-dot {
             width: 8px;
@@ -52,6 +79,23 @@
             background-color: #00ffcc;
             border-radius: 50%;
             box-shadow: 0 0 8px #00ffcc;
+        }
+        .btn-logout {
+            background: #111d2d;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .btn-logout:hover {
+            background: rgba(255, 77, 77, 0.15);
+            box-shadow: 0 0 8px rgba(255, 77, 77, 0.3);
         }
 
         /* MENÚ DE NAVEGACIÓN */
@@ -171,7 +215,6 @@
             margin-top: 15px;
             padding-top: 12px;
             border-top: 1px dashed #1f3b5c;
-            display: flex;
             flex-direction: column;
             gap: 8px;
         }
@@ -192,7 +235,7 @@
         .ctx-btn:hover { background: #192533; color: #00ffff; border-color: #00ffff; }
         .ctx-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #1f3b5c; color: #7b93a8; }
 
-        /* CONTENEDORES DE FORMULARIOS (AGREGAR SERVICIO) */
+        /* CONTENEDOR DE FORMULARIOS (AGREGAR / EDITAR SERVICIO) */
         .container-forms {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -222,7 +265,6 @@
             align-items: center;
         }
 
-        /* BOTÓN LÁPIZ PARA EDITAR */
         .btn-edit {
             background: #111d2d;
             border: 1px solid #00ffff;
@@ -310,7 +352,6 @@
         }
         .btn-add-transport:hover { background: rgba(0, 255, 204, 0.1); }
 
-        /* SECCIÓN INFERIOR DE REPORTE Y HISTORIAL */
         .bottom-section {
             max-width: 1400px;
             margin: 0 auto 30px auto;
@@ -384,37 +425,59 @@
 </head>
 <body>
 
+    <!-- PANTALLA DE INICIO DE SESIÓN -->
+    <div id="vista-login">
+        <div class="login-card">
+            <div class="login-title">GS3 - Control de Acceso</div>
+            <div class="form-row" style="grid-template-columns: 1fr; margin-bottom: 15px;">
+                <label style="text-align: left; margin-bottom: 5px;">Seleccione Usuario</label>
+                <select id="login-usuario" style="width: 100%; padding: 10px;">
+                    <option value="Monitorista 1">Monitorista 1</option>
+                    <option value="Monitorista 2">Monitorista 2</option>
+                    <option value="Monitorista 3">Monitorista 3</option>
+                    <option value="Coordinador">Coordinador (Solo Lectura)</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <button class="btn-action" style="width: 100%; border-radius: 4px; padding: 12px;" onclick="iniciarSesion()">Ingresar al Sistema</button>
+        </div>
+    </div>
+
     <!-- ENCABEZADO -->
     <div class="header">
         <div class="header-title">SERVICIO GLOBAL DE SEGURIDAD Y SISTEMAS PRIVADOS GS3 S.A. DE C.V.</div>
         <div class="user-status">
-            <span class="status-dot"></span> CENTRO DE MONITOREO ACTIVO | USUARIO: <span id="label-sesion-usuario" style="color: #ffffff; font-weight: bold;">Monitorista</span>
+            <span class="status-dot"></span> CENTRO DE MONITOREO ACTIVO | <span id="display-user-rol">--</span>
+            <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
         </div>
     </div>
 
     <!-- MENÚ DE NAVEGACIÓN SUPERIOR -->
     <div class="navbar">
         <button class="nav-btn active" onclick="cambiarVista('panel')">Panel Principal</button>
-        <button class="nav-btn" onclick="cambiarVista('agregar')">+ Agregar Servicio</button>
+        <button class="nav-btn" id="btn-menu-agregar" onclick="cambiarVista('agregar')">+ Agregar Servicio</button>
     </div>
 
     <!-- VISTA: PANEL PRINCIPAL -->
     <div id="vista-panel" class="view-section active">
         <div class="card-title">Bitácoras Activas y Registradas en Sistema</div>
         <div id="panel-bitacoras-grid" class="panel-grid">
-            <!-- Las tarjetas de bitácoras se cargarán aquí dinámicamente -->
+            <div style="color: #7b93a8; font-size: 12px; grid-column: 1 / -1; text-align: center; padding: 30px;">
+                No hay servicios registrados en este momento.
+            </div>
         </div>
     </div>
 
-    <!-- VISTA: AGREGAR SERVICIO -->
+    <!-- VISTA: AGREGAR / EDITAR SERVICIO -->
     <div id="vista-agregar" class="view-section">
+        <input type="hidden" id="modo-edicion-bitacora" value="">
         <div class="container-forms">
             
             <!-- COLUMNA 1: GENERALES, CLIENTE Y RUTA + CUSTODIA -->
-            <div class="card" id="card-col1">
+            <div class="card">
                 <div class="card-title">
                     1. Datos Generales y Ruta
-                    <button class="btn-edit" onclick="habilitarFormulario('col1')" title="Modificar datos">✏️</button>
+                    <button class="btn-edit" onclick="habilitarFormulario()" title="Modificar datos">✏️</button>
                 </div>
                 
                 <div class="form-row">
@@ -469,17 +532,16 @@
                 </div>
             </div>
 
-            <!-- COLUMNA 2: DATOS DE TRANSPORTE (CON SOPORTE MULTI-TRANSPORTE) -->
-            <div class="card" id="card-col2">
+            <!-- COLUMNA 2: DATOS DE TRANSPORTE -->
+            <div class="card">
                 <div class="card-title">
                     2. Datos de Transporte
-                    <button class="btn-edit" onclick="habilitarFormulario('col2')" title="Modificar datos">✏️</button>
+                    <button class="btn-edit" onclick="habilitarFormulario()" title="Modificar datos">✏️</button>
                 </div>
 
-                <button class="btn-add-transport" onclick="agregarUnidadTransporte()">+ Agregar otro transporte</button>
+                <button class="btn-add-transport" id="btn-add-trans-ui" onclick="agregarUnidadTransporte()">+ Agregar otro transporte</button>
 
                 <div id="contenedor-transportes">
-                    <!-- Primer bloque de transporte por defecto -->
                     <div class="transport-group-container" data-index="1">
                         <div style="font-size: 10px; color: #00ffff; margin-bottom: 10px; font-weight: bold; letter-spacing: 1px;">TRANSPORTE 1</div>
                         <div class="form-row">
@@ -540,7 +602,6 @@
                             <label>Placas Remolque</label>
                             <input type="text" class="t-placas-rem" placeholder="Placas remolque 1">
                         </div>
-                        <!-- SECCIÓN DINÁMICA FULL -->
                         <div class="seccion-full full-section">
                             <div class="form-row" style="margin-top: 10px;">
                                 <label style="color: #00ffff;">Eco Rem 2</label>
@@ -563,7 +624,7 @@
             <div class="report-box">
                 <div>
                     <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">USUARIO EN TURNO</label>
-                    <div id="usuario-sistema-fijo" style="background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; font-size: 12px; font-weight: bold;">Monitorista</div>
+                    <input type="text" id="usuario-sistema" disabled style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px;">
                 </div>
                 <div>
                     <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">REPORTE / UBICACIÓN MANUAL</label>
@@ -591,21 +652,21 @@
                     <div style="font-size: 11px; color: #00ffcc; padding-top: 5px;" id="reloj-actual">--/--/---- --:--:--</div>
                 </div>
                 <div style="text-align: right;">
-                    <button class="btn-action" onclick="guardarServicioCompleto()">Guardar Servicio</button>
+                    <button class="btn-action" id="btn-guardar-servicio" onclick="guardarServicioCompleto()">Guardar Servicio</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- VISTA: MONITOREO ACTIVO / SEGUIMIENTO DETALLADO -->
+    <!-- VISTA: MONITOREO ACTIVO -->
     <div id="vista-monitoreo" class="view-section">
         <div class="card-title" id="titulo-monitoreo-activo">Monitoreo de Bitácora: [---]</div>
         
-        <div class="bottom-section" style="padding: 0; margin-top: 20px;">
+        <div class="bottom-section" style="padding: 0; margin-top: 20px;" id="panel-registro-movimiento">
             <div class="report-box">
                 <div>
                     <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">USUARIO</label>
-                    <div id="mon-usuario-fijo" style="background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px; font-size: 12px; font-weight: bold;">Monitorista</div>
+                    <input type="text" id="mon-usuario" disabled style="width: 100%; background: #192533; border: 1px solid #1f3b5c; padding: 10px; color: #00ffff; border-radius: 4px;">
                 </div>
                 <div>
                     <label style="color: #7b93a8; font-size: 11px; display: block; margin-bottom: 5px;">UBICACIÓN / REPORTE</label>
@@ -652,7 +713,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dinámico -->
                 </tbody>
             </table>
         </div>
@@ -663,25 +723,12 @@
 
     <!-- SCRIPT DE CONTROL Y LÓGICA -->
     <script>
-        // Almacenamiento local en memoria de servicios
-        let serviciosDB = [];
+        // Base de datos global compartida en localStorage para persistir entre usuarios
+        let serviciosDB = JSON.parse(localStorage.getItem('gs3_serviciosDB')) || [];
+        let usuarioActual = null;
         let bitacoraActivaActual = null;
         let contadorTransportes = 1;
-        
-        // Simulación de sesión de usuario en curso (puedes cambiarlo a "Coordinador" o "Administrador" según se requiera)
-        let usuarioSesionActual = "Monitorista";
 
-        // Inicializar datos de sesión en pantalla
-        document.addEventListener("DOMContentLoaded", () => {
-            const lbl = document.getElementById('label-sesion-usuario');
-            if (lbl) lbl.textContent = usuarioSesionActual;
-            const usrFijo1 = document.getElementById('usuario-sistema-fijo');
-            if (usrFijo1) usrFijo1.textContent = usuarioSesionActual;
-            const usrFijo2 = document.getElementById('mon-usuario-fijo');
-            if (usrFijo2) usrFijo2.textContent = usuarioSesionActual;
-        });
-
-        // Reloj en tiempo real
         setInterval(() => {
             const now = new Date();
             const fechaStr = now.toLocaleString('es-MX');
@@ -691,7 +738,31 @@
             if (el2) el2.textContent = fechaStr;
         }, 1000);
 
-        // Control de vistas en el menú superior
+        function iniciarSesion() {
+            const select = document.getElementById('login-usuario').value;
+            usuarioActual = select;
+            document.getElementById('display-user-rol').textContent = `USUARIO: ${usuarioActual}`;
+            document.getElementById('vista-login').style.display = 'none';
+
+            // Configurar permisos según rol
+            const btnAgregar = document.getElementById('btn-menu-agregar');
+            if (usuarioActual === 'Coordinador') {
+                btnAgregar.style.display = 'none'; // Coordinador solo lectura
+            } else {
+                btnAgregar.style.display = 'block';
+            }
+
+            document.getElementById('usuario-sistema').value = usuarioActual;
+            document.getElementById('mon-usuario').value = usuarioActual;
+
+            renderizarPanelPrincipal();
+        }
+
+        function cerrarSesion() {
+            usuarioActual = null;
+            document.getElementById('vista-login').style.display = 'flex';
+        }
+
         function cambiarVista(vista) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -701,109 +772,24 @@
                 document.querySelectorAll('.nav-btn')[0].classList.add('active');
                 renderizarPanelPrincipal();
             } else if (vista === 'agregar') {
+                if (usuarioActual === 'Coordinador') {
+                    alert('El coordinador cuenta con derechos de solo lectura.');
+                    return;
+                }
+                // Limpiar formulario para nuevo registro
+                document.getElementById('modo-edicion-bitacora').value = '';
+                document.getElementById('bitacora').disabled = false;
+                document.getElementById('bitacora').value = '';
+                document.querySelectorAll('#vista-agregar input, #vista-agregar select').forEach(i => {
+                    if(i.id !== 'usuario-sistema') i.disabled = false;
+                });
                 document.getElementById('vista-agregar').classList.add('active');
                 document.querySelectorAll('.nav-btn')[1].classList.add('active');
-                // Limpiar y preparar formulario para un nuevo registro limpio
-                limpiarYPrepararFormularioNuevo();
             } else if (vista === 'monitoreo') {
                 document.getElementById('vista-monitoreo').classList.add('active');
             }
         }
 
-        // Limpia el formulario de agregar servicio para que esté totalmente habilitado y vacío para un nuevo registro
-        function limpiarYPrepararFormularioNuevo() {
-            // Limpiar inputs generales y de custodia
-            document.querySelectorAll('#vista-agregar input:not([type="button"]):not([type="submit"])').forEach(input => {
-                input.value = '';
-                input.disabled = false;
-            });
-
-            // Restablecer selects
-            document.querySelectorAll('#vista-agregar select').forEach(select => {
-                select.selectedIndex = 0;
-                select.disabled = false;
-            });
-
-            // Restablecer contenedor de transportes a 1 solo transporte limpio
-            const contenedor = document.getElementById('contenedor-transportes');
-            contadorTransportes = 1;
-            contenedor.innerHTML = `
-                <div class="transport-group-container" data-index="1">
-                    <div style="font-size: 10px; color: #00ffff; margin-bottom: 10px; font-weight: bold; letter-spacing: 1px;">TRANSPORTE 1</div>
-                    <div class="form-row">
-                        <label>Operador</label>
-                        <input type="text" class="t-operador" placeholder="Nombre completo">
-                    </div>
-                    <div class="form-row">
-                        <label>Teléfono</label>
-                        <input type="text" class="t-telefono" placeholder="Número de contacto">
-                    </div>
-                    <div class="form-row">
-                        <label>Tipo de Unidad</label>
-                        <select class="t-tipo-unidad" onchange="verificarUnidadFull(this)">
-                            <option value="">Seleccione unidad...</option>
-                            <option value="Particular">Particular</option>
-                            <option value="Camioneta 1.5">Camioneta 1.5</option>
-                            <option value="Camioneta 3.5">Camioneta 3.5</option>
-                            <option value="Camión">Camión</option>
-                            <option value="Mudanzero">Mudanzero</option>
-                            <option value="Rabón">Rabón</option>
-                            <option value="Torton">Torton</option>
-                            <option value="Tráiler">Tráiler</option>
-                            <option value="Full">Full</option>
-                            <option value="Low Boy">Low Boy</option>
-                            <option value="Góndola">Góndola</option>
-                            <option value="Auto tanque">Auto tanque</option>
-                            <option value="Jaula">Jaula</option>
-                            <option value="Tolva">Tolva</option>
-                            <option value="Eco">Eco</option>
-                            <option value="Placas">Placas</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <label>Eco</label>
-                        <input type="text" class="t-eco" placeholder="Número económico">
-                    </div>
-                    <div class="form-row">
-                        <label>Placas</label>
-                        <input type="text" class="t-placas" placeholder="Placas tractor">
-                    </div>
-                    <div class="form-row">
-                        <label>Marca / Modelo</label>
-                        <input type="text" class="t-marca" placeholder="Ej. Kenworth T680">
-                    </div>
-                    <div class="form-row">
-                        <label>NIV</label>
-                        <input type="text" class="t-niv" placeholder="Número de identificación vehicular">
-                    </div>
-                    <div class="form-row">
-                        <label>Motor</label>
-                        <input type="text" class="t-motor" placeholder="Serie o tipo de motor">
-                    </div>
-                    <div class="form-row">
-                        <label>Eco Remolque</label>
-                        <input type="text" class="t-eco-rem" placeholder="Económico remolque 1">
-                    </div>
-                    <div class="form-row">
-                        <label>Placas Remolque</label>
-                        <input type="text" class="t-placas-rem" placeholder="Placas remolque 1">
-                    </div>
-                    <div class="seccion-full full-section">
-                        <div class="form-row" style="margin-top: 10px;">
-                            <label style="color: #00ffff;">Eco Rem 2</label>
-                            <input type="text" class="t-eco-rem2" placeholder="Económico segundo remolque">
-                        </div>
-                        <div class="form-row" style="margin-bottom: 10px;">
-                            <label style="color: #00ffff;">Placas Rem 2</label>
-                            <input type="text" class="t-placas-rem2" placeholder="Placas segundo remolque">
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.getElementById('ubicacion-reporte').value = '';
-        }
-
-        // Agregar dinámicamente más transportes en el mismo servicio
         function agregarUnidadTransporte() {
             contadorTransportes++;
             const contenedor = document.getElementById('contenedor-transportes');
@@ -854,7 +840,6 @@
             contenedor.appendChild(div);
         }
 
-        // Lógica para mostrar campos de segundo remolque si el transporte es Full
         function verificarUnidadFull(selectElement) {
             const grupo = selectElement.closest('.transport-group-container');
             const seccionFull = grupo.querySelector('.seccion-full');
@@ -867,36 +852,33 @@
             }
         }
 
-        // Habilitar formularios con el botón de lápiz
-        function habilitarFormulario(seccion) {
+        function habilitarFormulario() {
+            if (usuarioActual === 'Coordinador') {
+                alert('El coordinador tiene derechos de solo lectura.');
+                return;
+            }
             const card = event.target.closest('.card');
             const inputs = card.querySelectorAll('input, select');
             inputs.forEach(i => i.disabled = false);
         }
 
-        // Guardar servicio completo y bloquear campos
         function guardarServicioCompleto() {
-            const bitacora = document.getElementById('bitacora').value.trim();
+            const bitacoraId = document.getElementById('bitacora').value.trim();
             const cliente = document.getElementById('cliente').value;
             const origen = document.getElementById('origen').value.trim();
             const destino = document.getElementById('destino').value.trim();
-            const usuario = usuarioSesionActual;
+            const usuario = usuarioActual;
             const ubicacion = document.getElementById('ubicacion-reporte').value.trim();
             const anomalia = document.getElementById('anomalia-select').value;
             const fechaHora = document.getElementById('reloj-actual').textContent;
+            const modoEdicion = document.getElementById('modo-edicion-bitacora').value;
 
-            if (!bitacora) {
+            if (!bitacoraId) {
                 alert('Por favor, ingrese el Número de Bitácora.');
                 document.getElementById('bitacora').focus();
                 return;
             }
 
-            if (serviciosDB.some(s => s.bitacora === bitacora)) {
-                alert('El número de bitácora ya existe en el sistema.');
-                return;
-            }
-
-            // Recolectar datos de transportes
             const transportes = [];
             document.querySelectorAll('.transport-group-container').forEach(grupo => {
                 transportes.push({
@@ -908,35 +890,61 @@
                 });
             });
 
-            const nuevoServicio = {
-                bitacora,
-                cliente: cliente || 'N/D',
-                origen: origen || 'N/D',
-                destino: destino || 'N/D',
-                estatusServicio: 'Inactivo',
-                anomaliaActual: anomalia,
-                historial: [
-                    { fechaHora, usuario, bitacora, cliente: cliente || 'N/D', ubicacion: ubicacion || 'Creación y registro de servicio', anomalia }
-                ],
-                transportes
-            };
+            if (modoEdicion) {
+                // Actualizar registro existente
+                const serv = serviciosDB.find(s => s.bitacora === modoEdicion);
+                if (serv) {
+                    serv.cliente = cliente || 'N/D';
+                    serv.origen = origen || 'N/D';
+                    serv.destino = destino || 'N/D';
+                    serv.transportes = transportes;
+                    serv.historial.unshift({
+                        fechaHora,
+                        usuario,
+                        bitacora: serv.bitacora,
+                        cliente: serv.cliente,
+                        ubicacion: 'Actualización de datos generales/transporte',
+                        anomalia: serv.anomaliaActual
+                    });
+                }
+                alert('¡Bitácora actualizada correctamente!');
+            } else {
+                if (serviciosDB.some(s => s.bitacora === bitacoraId)) {
+                    alert('El número de bitácora ya existe en el sistema.');
+                    return;
+                }
+                const nuevoServicio = {
+                    bitacora: bitacoraId,
+                    cliente: cliente || 'N/D',
+                    origen: origen || 'N/D',
+                    destino: destino || 'N/D',
+                    estatusServicio: 'Inactivo',
+                    anomaliaActual: anomalia,
+                    historial: [
+                        { fechaHora, usuario, bitacora: bitacoraId, cliente: cliente || 'N/D', ubicacion: ubicacion || 'Creación y registro de servicio', anomalia }
+                    ],
+                    transportes
+                };
+                serviciosDB.push(nuevoServicio);
+                alert('¡Servicio guardado con éxito!');
+            }
 
-            serviciosDB.push(nuevoServicio);
-
-            // Inhabilitar campos tras guardar
-            document.querySelectorAll('#vista-agregar input, #vista-agregar select').forEach(i => i.disabled = true);
-
-            alert('¡Servicio guardado con éxito! Información general y de transporte bloqueada.');
+            sincronizarDB();
             cambiarVista('panel');
         }
 
-        // Renderizar el panel principal con las tarjetas y reglas de color
+        function sincronizarDB() {
+            localStorage.setItem('gs3_serviciosDB', JSON.stringify(serviciosDB));
+        }
+
         function renderizarPanelPrincipal() {
+            // Recargar DB desde localStorage para compartir entre usuarios
+            serviciosDB = JSON.parse(localStorage.getItem('gs3_serviciosDB')) || [];
             const grid = document.getElementById('panel-bitacoras-grid');
             grid.innerHTML = '';
 
             if (serviciosDB.length === 0) {
-                grid.innerHTML = '<div style="color: #7b93a8; font-size: 12px; grid-column: 1 / -1; text-align: center; padding: 30px;">No hay servicios registrados. Utilice "+ Agregar Servicio".</div>';
+                grid.innerHTML = '<div style="color: #7b93a8; font-size: 12px; grid-column: 1 / -1; text-align: center; padding: 30px;">No hay servicios registrados en este momento.</div>';
                 return;
             }
 
@@ -961,9 +969,17 @@
 
                 const card = document.createElement('div');
                 card.className = `bitacora-card ${claseColor}`;
-                card.onclick = (e) => {
-                    toggleMenuBitacora(card);
-                };
+                card.onclick = () => toggleMenuBitacora(card);
+
+                let botonesAccionHTML = `
+                    <button class="ctx-btn" ${serv.estatusServicio !== 'Inactivo' ? 'disabled' : ''} onclick="event.stopPropagation(); activarServicio('${serv.bitacora}')">+ Activar servicio</button>
+                    <button class="ctx-btn" ${serv.estatusServicio !== 'Activo' && serv.estatusServicio !== 'Monitoreando' ? 'disabled' : ''} onclick="event.stopPropagation(); abrirMonitoreo('${serv.bitacora}')">+ Monitorear</button>
+                    <button class="ctx-btn" ${!(serv.estatusServicio === 'Activo' && (serv.anomaliaActual === 'En destino' || serv.anomaliaActual === 'Salida en falso')) ? 'disabled' : ''} onclick="event.stopPropagation(); finalizarServicio('${serv.bitacora}')">+ Finalizar servicio</button>
+                `;
+
+                if (usuarioActual !== 'Coordinador') {
+                    botonesAccionHTML += `<button class="ctx-btn" onclick="event.stopPropagation(); editarServicio('${serv.bitacora}')">+ Editar</button>`;
+                }
 
                 card.innerHTML = `
                     <div class="bitacora-header">
@@ -975,17 +991,14 @@
                     <div class="bitacora-info"><span>Destino:</span> ${serv.destino}</div>
                     <div class="bitacora-info"><span>Estatus Actual:</span> ${serv.anomaliaActual}</div>
                     
-                    <div class="context-menu" id="menu-${serv.bitacora}" style="display: none;">
-                        <button class="ctx-btn" ${serv.estatusServicio !== 'Inactivo' ? 'disabled' : ''} onclick="event.stopPropagation(); activarServicio('${serv.bitacora}')">+ Activar servicio</button>
-                        <button class="ctx-btn" ${serv.estatusServicio !== 'Activo' && serv.estatusServicio !== 'Monitoreando' ? 'disabled' : ''} onclick="event.stopPropagation(); abrirMonitoreo('${serv.bitacora}')">+ Monitorear</button>
-                        <button class="ctx-btn" ${!(serv.estatusServicio === 'Activo' && (serv.anomaliaActual === 'En destino' || serv.anomaliaActual === 'Salida en falso')) ? 'disabled' : ''} onclick="event.stopPropagation(); finalizarServicio('${serv.bitacora}')">+ Finalizar servicio</button>
+                    <div class="context-menu" id="menu-${serv.bitacora}">
+                        ${botonesAccionHTML}
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Mostrar u ocultar menú contextual al hacer clic en la bitácora
         function toggleMenuBitacora(cardElement) {
             const menu = cardElement.querySelector('.context-menu');
             document.querySelectorAll('.context-menu').forEach(m => {
@@ -994,27 +1007,64 @@
             menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Acciones del menú contextual
         function activarServicio(bitacoraId) {
             const serv = serviciosDB.find(s => s.bitacora === bitacoraId);
             if (serv) {
                 serv.estatusServicio = 'Activo';
+                sincronizarDB();
                 alert(`¡Servicio ${bitacoraId} activado con éxito!`);
                 renderizarPanelPrincipal();
             }
+        }
+
+        function editarServicio(bitacoraId) {
+            const serv = serviciosDB.find(s => s.bitacora === bitacoraId);
+            if (!serv) return;
+
+            document.getElementById('modo-edicion-bitacora').value = serv.bitacora;
+            document.getElementById('bitacora').value = serv.bitacora;
+            document.getElementById('bitacora').disabled = true; // No modificar el ID de bitácora
+            document.getElementById('cliente').value = serv.cliente;
+            document.getElementById('origen').value = serv.origen;
+            document.getElementById('destino').value = serv.destino;
+
+            // Cargar primer transporte si existe
+            if (serv.transportes && serv.transportes.length > 0) {
+                const t = serv.transportes[0];
+                document.querySelector('.t-operador').value = t.operador || '';
+                document.querySelector('.t-telefono').value = t.telefono || '';
+                document.querySelector('.t-tipo-unidad').value = t.tipo || '';
+                document.querySelector('.t-eco').value = t.eco || '';
+                document.querySelector('.t-placas').value = t.placas || '';
+            }
+
+            document.querySelectorAll('#vista-agregar input, #vista-agregar select').forEach(i => {
+                if(i.id !== 'bitacora' && i.id !== 'usuario-sistema') i.disabled = false;
+            });
+
+            cambiarVista('agregar');
         }
 
         function abrirMonitoreo(bitacoraId) {
             bitacoraActivaActual = serviciosDB.find(s => s.bitacora === bitacoraId);
             if (bitacoraActivaActual) {
                 document.getElementById('titulo-monitoreo-activo').textContent = `Monitoreo de Bitácora: ${bitacoraActivaActual.bitacora} (${bitacoraActivaActual.cliente})`;
+                
+                // Ocultar panel de registro de movimiento si es coordinador (solo lectura)
+                const panelReg = document.getElementById('panel-registro-movimiento');
+                if (usuarioActual === 'Coordinador') {
+                    panelReg.style.display = 'none';
+                } else {
+                    panelReg.style.display = 'block';
+                }
+
                 actualizarTablaHistorialMonitoreo();
                 cambiarVista('monitoreo');
             }
         }
 
         function registrarSeguimientoMonitoreo() {
-            const usuario = usuarioSesionActual;
+            const usuario = usuarioActual;
             const ubicacion = document.getElementById('mon-ubicacion').value.trim();
             const anomalia = document.getElementById('mon-anomalia').value;
             const fechaHora = document.getElementById('mon-reloj').textContent;
@@ -1035,6 +1085,7 @@
                 anomalia
             });
 
+            sincronizarDB();
             document.getElementById('mon-ubicacion').value = '';
             document.getElementById('mon-anomalia').selectedIndex = 0;
             actualizarTablaHistorialMonitoreo();
@@ -1067,6 +1118,7 @@
             if (serv) {
                 serv.estatusServicio = 'Finalizado';
                 serv.anomaliaActual = 'Servicio Finalizado';
+                sincronizarDB();
                 alert(`El servicio ${bitacoraId} ha sido finalizado correctamente.`);
                 renderizarPanelPrincipal();
             }
